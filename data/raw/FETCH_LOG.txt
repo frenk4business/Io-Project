@@ -1,0 +1,28 @@
+[2026-04-21T07:10:42.202832+00:00] ============================================================
+[2026-04-21T07:10:42.208143+00:00] Starting data acquisition run
+[2026-04-21T07:10:42.211155+00:00] force=True
+[2026-04-21T07:10:42.212276+00:00] === Dataset A: Io Volcanic Hotspot Catalog ===
+[2026-04-21T07:10:42.213580+00:00] Source: USGS SIM3168 Io_HotSpots_Locations.shp (Williams et al. 2011)
+[2026-04-21T07:10:42.214693+00:00] Downloading Io SIM3168 GIS database from https://asc-astropedia.s3.us-west-2.amazonaws.com/Io/Geology/Io_SIM3168_Database.zip
+[2026-04-21T07:10:43.020820+00:00]   Total size: 268.0 MB
+[2026-04-21T07:14:33.710839+00:00]   Downloaded 268.0 MB
+[2026-04-21T07:14:34.715212+00:00]   Wrote 172 hotspot records to C:\Users\frenk\Claude\io-hotspot-prediction\data\raw\io_volcanic_hotspots.csv    [REAL DATA: USGS SIM3168 Williams et al. 2011]
+[2026-04-21T07:14:34.767638+00:00] OK: C:\Users\frenk\Claude\io-hotspot-prediction\data\raw\io_volcanic_hotspots.csv
+[2026-04-21T07:14:34.770614+00:00] === Dataset B: USGS Io Geology Map ===
+[2026-04-21T07:14:34.772632+00:00] Source: USGS SIM3168 Io_GeoUnits.shp (Williams et al. 2011)
+[2026-04-21T07:14:34.774619+00:00] Downloading Io SIM3168 GIS database from https://asc-astropedia.s3.us-west-2.amazonaws.com/Io/Geology/Io_SIM3168_Database.zip
+[2026-04-21T07:14:35.468446+00:00]   Total size: 268.0 MB
+[2026-04-21T07:19:13.695400+00:00]   Downloaded 268.0 MB
+[2026-04-21T07:19:13.803634+00:00]   Extracted geology map to C:\Users\frenk\Claude\io-hotspot-prediction\data\raw\io_geology_map.shp    [REAL DATA: USGS SIM3168 Williams et al. 2011]
+[2026-04-21T07:19:13.839630+00:00] OK: C:\Users\frenk\Claude\io-hotspot-prediction\data\raw\io_geology_map.shp
+[2026-04-21T07:19:13.841839+00:00] === Dataset C: Tidal Heating Flux Grid ===
+[2026-04-21T07:19:13.842884+00:00] WARNING: No real tidal heating grid was found. Using SYNTHETIC PROXY.
+[2026-04-21T07:19:13.843985+00:00] See data/external/SOURCES.md § 3 for real data sources.
+[2026-04-21T07:19:14.446110+00:00]   Wrote 64800 synthetic tidal heating grid points to C:\Users\frenk\Claude\io-hotspot-prediction\data\raw\io_tidal_heating_flux.csv    [SYNTHETIC PROXY — replace with real data before final analysis]
+[2026-04-21T07:19:14.451519+00:00] OK: C:\Users\frenk\Claude\io-hotspot-prediction\data\raw\io_tidal_heating_flux.csv
+[2026-04-21T07:19:14.453833+00:00] 
+=== Verification ===
+[2026-04-21T07:19:14.458846+00:00]   [OK] io_volcanic_hotspots.csv (13.7 KB)
+[2026-04-21T07:19:14.460842+00:00]   [OK] io_geology_map.shp (41.1 KB)
+[2026-04-21T07:19:14.465844+00:00]   [OK] io_tidal_heating_flux.csv (6368.2 KB)
+[2026-04-21T07:19:14.467841+00:00] All datasets are in place. Pipeline is ready to run.

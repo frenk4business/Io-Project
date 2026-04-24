@@ -1,0 +1,289 @@
+source_id,name,longitude,latitude,orbit,observation_time,power_gw,instrument,source,wavelength_um,intensity_value,intensity_unit
+Mura2024-88-49M,Shamash Patera,-154.0,-32.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.61,W m-2 sr-1 peak_radiance
+Mura2024-88-49L,Shamash Patera,-154.0,-32.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.16,W m-2 sr-1 peak_radiance
+Mura2024-89-49M,close to Tupan Patera,-137.0,-23.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.52,W m-2 sr-1 peak_radiance
+Mura2024-89-49L,close to Tupan Patera,-137.0,-23.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.13,W m-2 sr-1 peak_radiance
+Mura2024-91-49M,close to Tohil Patera,-158.0,-23.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.06,W m-2 sr-1 peak_radiance
+Mura2024-91-49L,close to Tohil Patera,-158.0,-23.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.04,W m-2 sr-1 peak_radiance
+Mura2024-87-49M,Culann Patera,-161.0,-20.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.27,W m-2 sr-1 peak_radiance
+Mura2024-87-49L,Culann Patera,-161.0,-20.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.06,W m-2 sr-1 peak_radiance
+Mura2024-77-43M,Prometheus A,-151.0,-3.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.39,W m-2 sr-1 peak_radiance
+Mura2024-77-43L,Prometheus A,-151.0,-3.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.37,W m-2 sr-1 peak_radiance
+Mura2024-77-49M,Prometheus A,-151.0,-3.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.76,W m-2 sr-1 peak_radiance
+Mura2024-77-49L,Prometheus A,-151.0,-3.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.23,W m-2 sr-1 peak_radiance
+Mura2024-84-43M,Prometheus B,-154.0,-2.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.1,W m-2 sr-1 peak_radiance
+Mura2024-84-49M,Prometheus B,-154.0,-2.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.15,W m-2 sr-1 peak_radiance
+Mura2024-84-49L,Prometheus B,-154.0,-2.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.04,W m-2 sr-1 peak_radiance
+Mura2024-93-43M,Ot Patera,144.0,-1.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.11,W m-2 sr-1 peak_radiance
+Mura2024-93-49M,Ot Patera,144.0,-1.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.11,W m-2 sr-1 peak_radiance
+Mura2024-23-41M,Tawhaki Patera,-75.0,4.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.32,W m-2 sr-1 peak_radiance
+Mura2024-23-41L,Tawhaki Patera,-75.0,4.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.29,W m-2 sr-1 peak_radiance
+Mura2024-23-47M,Tawhaki Patera,-75.0,4.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.39,W m-2 sr-1 peak_radiance
+Mura2024-3-47L,Loki Patera,50.0,9.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,6.79,W m-2 sr-1 peak_radiance
+Mura2024-48-41M,Ah Peku Patera,-105.0,10.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.08,W m-2 sr-1 peak_radiance
+Mura2024-48-41L,Ah Peku Patera,-105.0,10.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.06,W m-2 sr-1 peak_radiance
+Mura2024-48-43M,Ah Peku Patera,-105.0,10.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.03,W m-2 sr-1 peak_radiance
+Mura2024-48-47M,Ah Peku Patera,-105.0,10.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.14,W m-2 sr-1 peak_radiance
+Mura2024-48-49M,Ah Peku Patera,-105.0,10.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.04,W m-2 sr-1 peak_radiance
+Mura2024-7-41M,Kotar Patera,-61.0,11.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.4,W m-2 sr-1 peak_radiance
+Mura2024-7-41L,Kotar Patera,-61.0,11.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.29,W m-2 sr-1 peak_radiance
+Mura2024-7-47M,Kotar Patera,-61.0,11.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.17,W m-2 sr-1 peak_radiance
+Mura2024-7-47L,Kotar Patera,-61.0,11.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.19,W m-2 sr-1 peak_radiance
+Mura2024-78-43M,P13,-1.0,1.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.13,W m-2 sr-1 peak_radiance
+Mura2024-78-49M,P13,-1.0,1.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.08,W m-2 sr-1 peak_radiance
+Mura2024-32-41M,Gish Bar Patera,-89.0,16.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.11,W m-2 sr-1 peak_radiance
+Mura2024-32-41L,Gish Bar Patera,-89.0,16.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.05,W m-2 sr-1 peak_radiance
+Mura2024-32-43M,Gish Bar Patera,-89.0,16.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.1,W m-2 sr-1 peak_radiance
+Mura2024-32-43L,Gish Bar Patera,-89.0,16.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.03,W m-2 sr-1 peak_radiance
+Mura2024-32-47M,Gish Bar Patera,-89.0,16.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.27,W m-2 sr-1 peak_radiance
+Mura2024-32-47L,Gish Bar Patera,-89.0,16.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.11,W m-2 sr-1 peak_radiance
+Mura2024-75-43M,Mulungu Patera,143.0,16.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.18,W m-2 sr-1 peak_radiance
+Mura2024-75-43L,Mulungu Patera,143.0,16.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.06,W m-2 sr-1 peak_radiance
+Mura2024-75-49M,Mulungu Patera,143.0,16.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.07,W m-2 sr-1 peak_radiance
+Mura2024-75-49L,Mulungu Patera,143.0,16.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-92-47M,Daedalus Patera,86.0,18.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.77,W m-2 sr-1 peak_radiance
+Mura2024-92-47L,Daedalus Patera,86.0,18.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.31,W m-2 sr-1 peak_radiance
+Mura2024-92-49M,Daedalus Patera,86.0,18.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.57,W m-2 sr-1 peak_radiance
+Mura2024-58-41M,Yeloje Patera A,-131.0,19.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.04,W m-2 sr-1 peak_radiance
+Mura2024-58-41L,Yeloje Patera A,-131.0,19.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.07,W m-2 sr-1 peak_radiance
+Mura2024-58-43M,Yeloje Patera A,-131.0,19.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.06,W m-2 sr-1 peak_radiance
+Mura2024-58-43L,Yeloje Patera A,-131.0,19.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-58-47M,Yeloje Patera A,-131.0,19.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.16,W m-2 sr-1 peak_radiance
+Mura2024-58-47L,Yeloje Patera A,-131.0,19.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.07,W m-2 sr-1 peak_radiance
+Mura2024-58-49M,Yeloje Patera A,-131.0,19.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.24,W m-2 sr-1 peak_radiance
+Mura2024-58-49L,Yeloje Patera A,-131.0,19.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.06,W m-2 sr-1 peak_radiance
+Mura2024-33-41M,Monan Patera,-106.0,20.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.11,W m-2 sr-1 peak_radiance
+Mura2024-33-41L,Monan Patera,-106.0,20.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.05,W m-2 sr-1 peak_radiance
+Mura2024-33-43M,Monan Patera,-106.0,20.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.18,W m-2 sr-1 peak_radiance
+Mura2024-33-43L,Monan Patera,-106.0,20.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.1,W m-2 sr-1 peak_radiance
+Mura2024-33-47M,Monan Patera,-106.0,20.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.11,W m-2 sr-1 peak_radiance
+Mura2024-33-47L,Monan Patera,-106.0,20.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.05,W m-2 sr-1 peak_radiance
+Mura2024-33-49M,Monan Patera,-106.0,20.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.29,W m-2 sr-1 peak_radiance
+Mura2024-33-49L,Monan Patera,-106.0,20.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.12,W m-2 sr-1 peak_radiance
+Mura2024-4-41M,Amirani A,-115.0,21.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.81,W m-2 sr-1 peak_radiance
+Mura2024-4-41L,Amirani A,-115.0,21.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.32,W m-2 sr-1 peak_radiance
+Mura2024-4-43M,Amirani A,-115.0,21.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.72,W m-2 sr-1 peak_radiance
+Mura2024-4-43L,Amirani A,-115.0,21.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.25,W m-2 sr-1 peak_radiance
+Mura2024-4-47M,Amirani A,-115.0,21.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,1.07,W m-2 sr-1 peak_radiance
+Mura2024-4-47L,Amirani A,-115.0,21.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.37,W m-2 sr-1 peak_radiance
+Mura2024-4-49M,Amirani A,-115.0,21.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.94,W m-2 sr-1 peak_radiance
+Mura2024-4-49L,Amirani A,-115.0,21.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.29,W m-2 sr-1 peak_radiance
+Mura2024-57-43M,Estan Patera,-86.0,21.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.04,W m-2 sr-1 peak_radiance
+Mura2024-57-43L,Estan Patera,-86.0,21.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-57-47M,Estan Patera,-86.0,21.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.04,W m-2 sr-1 peak_radiance
+Mura2024-57-47L,Estan Patera,-86.0,21.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-26-41M,Girru Patera,121.0,22.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.42,W m-2 sr-1 peak_radiance
+Mura2024-26-41L,Girru Patera,121.0,22.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.24,W m-2 sr-1 peak_radiance
+Mura2024-26-43M,Girru Patera,121.0,22.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.3,W m-2 sr-1 peak_radiance
+Mura2024-26-43L,Girru Patera,121.0,22.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.06,W m-2 sr-1 peak_radiance
+Mura2024-26-47M,Girru Patera,121.0,22.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.21,W m-2 sr-1 peak_radiance
+Mura2024-26-49M,Girru Patera,121.0,22.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.19,W m-2 sr-1 peak_radiance
+Mura2024-44-41M,East Girru,126.0,22.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.21,W m-2 sr-1 peak_radiance
+Mura2024-44-43M,East Girru,126.0,22.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.09,W m-2 sr-1 peak_radiance
+Mura2024-44-43L,East Girru,126.0,22.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.03,W m-2 sr-1 peak_radiance
+Mura2024-44-47M,East Girru,126.0,22.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,1.22,W m-2 sr-1 peak_radiance
+Mura2024-44-47L,East Girru,126.0,22.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.49,W m-2 sr-1 peak_radiance
+Mura2024-44-49M,East Girru,126.0,22.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,1.14,W m-2 sr-1 peak_radiance
+Mura2024-49-41M,E. Surya,-145.0,22.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.07,W m-2 sr-1 peak_radiance
+Mura2024-49-41L,E. Surya,-145.0,22.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-49-43M,E. Surya,-145.0,22.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.17,W m-2 sr-1 peak_radiance
+Mura2024-49-43L,E. Surya,-145.0,22.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-49-47M,E. Surya,-145.0,22.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.21,W m-2 sr-1 peak_radiance
+Mura2024-49-49M,E. Surya,-145.0,22.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.11,W m-2 sr-1 peak_radiance
+Mura2024-51-41M,N Lei-Zi Fluctus,-47.0,22.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.02,W m-2 sr-1 peak_radiance
+Mura2024-60-41M,Susanoo Patera,141.0,23.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.08,W m-2 sr-1 peak_radiance
+Mura2024-60-41L,Susanoo Patera,141.0,23.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-60-43M,Susanoo Patera,141.0,23.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,1.69,W m-2 sr-1 peak_radiance
+Mura2024-60-43L,Susanoo Patera,141.0,23.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.43,W m-2 sr-1 peak_radiance
+Mura2024-60-47M,Susanoo Patera,141.0,23.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.45,W m-2 sr-1 peak_radiance
+Mura2024-60-47L,Susanoo Patera,141.0,23.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.05,W m-2 sr-1 peak_radiance
+Mura2024-60-49M,Susanoo Patera,141.0,23.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.53,W m-2 sr-1 peak_radiance
+Mura2024-60-49L,Susanoo Patera,141.0,23.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.05,W m-2 sr-1 peak_radiance
+Mura2024-73-49M,Volund A,-174.0,25.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.19,W m-2 sr-1 peak_radiance
+Mura2024-73-49L,Volund A,-174.0,25.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.08,W m-2 sr-1 peak_radiance
+Mura2024-74-49M,Unrecognized,-1.0,1.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.14,W m-2 sr-1 peak_radiance
+Mura2024-74-49L,Unrecognized,-1.0,1.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.05,W m-2 sr-1 peak_radiance
+Mura2024-20-41M,Fuchi Patera,33.0,27.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.11,W m-2 sr-1 peak_radiance
+Mura2024-20-41L,Fuchi Patera,33.0,27.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-20-43M,Fuchi Patera,33.0,27.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.28,W m-2 sr-1 peak_radiance
+Mura2024-20-43L,Fuchi Patera,33.0,27.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.12,W m-2 sr-1 peak_radiance
+Mura2024-20-47M,Fuchi Patera,33.0,27.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.12,W m-2 sr-1 peak_radiance
+Mura2024-34-41M,Volund B,-175.0,30.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.11,W m-2 sr-1 peak_radiance
+Mura2024-34-41L,Volund B,-175.0,30.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.06,W m-2 sr-1 peak_radiance
+Mura2024-34-43M,Volund B,-175.0,30.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.14,W m-2 sr-1 peak_radiance
+Mura2024-34-43L,Volund B,-175.0,30.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.06,W m-2 sr-1 peak_radiance
+Mura2024-34-47M,Volund B,-175.0,30.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.16,W m-2 sr-1 peak_radiance
+Mura2024-34-49M,Volund B,-175.0,30.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.09,W m-2 sr-1 peak_radiance
+Mura2024-34-49L,Volund B,-175.0,30.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.04,W m-2 sr-1 peak_radiance
+Mura2024-40-41M,Arinna Fluctus,-148.0,30.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.08,W m-2 sr-1 peak_radiance
+Mura2024-40-41L,Arinna Fluctus,-148.0,30.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.04,W m-2 sr-1 peak_radiance
+Mura2024-40-43M,Arinna Fluctus,-148.0,30.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.14,W m-2 sr-1 peak_radiance
+Mura2024-40-43L,Arinna Fluctus,-148.0,30.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.07,W m-2 sr-1 peak_radiance
+Mura2024-40-47M,Arinna Fluctus,-148.0,30.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.07,W m-2 sr-1 peak_radiance
+Mura2024-40-47L,Arinna Fluctus,-148.0,30.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.03,W m-2 sr-1 peak_radiance
+Mura2024-40-49M,Arinna Fluctus,-148.0,30.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.07,W m-2 sr-1 peak_radiance
+Mura2024-40-49L,Arinna Fluctus,-148.0,30.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.03,W m-2 sr-1 peak_radiance
+Mura2024-11-41M,(includes,154.0,31.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,12.0,W m-2 sr-1 peak_radiance
+Mura2024-11-43M,(includes,154.0,31.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,13.0,W m-2 sr-1 peak_radiance
+Mura2024-11-43L,(includes,154.0,31.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.38,W m-2 sr-1 peak_radiance
+Mura2024-11-47M,(includes,154.0,31.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.23,W m-2 sr-1 peak_radiance
+Mura2024-11-47L,(includes,154.0,31.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.52,W m-2 sr-1 peak_radiance
+Mura2024-11-49M,(includes,154.0,31.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.25,W m-2 sr-1 peak_radiance
+Mura2024-11-49L,(includes,154.0,31.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.3,W m-2 sr-1 peak_radiance
+Mura2024-53-41M,Amirani B (P235?),-115.0,31.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.03,W m-2 sr-1 peak_radiance
+Mura2024-53-43M,Amirani B (P235?),-115.0,31.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.03,W m-2 sr-1 peak_radiance
+Mura2024-53-43L,Amirani B (P235?),-115.0,31.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-53-47M,Amirani B (P235?),-115.0,31.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.04,W m-2 sr-1 peak_radiance
+Mura2024-53-49M,Amirani B (P235?),-115.0,31.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.03,W m-2 sr-1 peak_radiance
+Mura2024-18-41M,Shango Patera,-100.0,32.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.13,W m-2 sr-1 peak_radiance
+Mura2024-18-41L,Shango Patera,-100.0,32.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.05,W m-2 sr-1 peak_radiance
+Mura2024-18-43M,Shango Patera,-100.0,32.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.25,W m-2 sr-1 peak_radiance
+Mura2024-18-43L,Shango Patera,-100.0,32.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.09,W m-2 sr-1 peak_radiance
+Mura2024-18-47M,Shango Patera,-100.0,32.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.15,W m-2 sr-1 peak_radiance
+Mura2024-18-47L,Shango Patera,-100.0,32.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.08,W m-2 sr-1 peak_radiance
+Mura2024-18-49M,Shango Patera,-100.0,32.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.18,W m-2 sr-1 peak_radiance
+Mura2024-18-49L,Shango Patera,-100.0,32.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.06,W m-2 sr-1 peak_radiance
+Mura2024-25-41M,Gauwa Patera,-11.0,34.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.06,W m-2 sr-1 peak_radiance
+Mura2024-25-41L,Gauwa Patera,-11.0,34.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.04,W m-2 sr-1 peak_radiance
+Mura2024-25-43M,Gauwa Patera,-11.0,34.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.09,W m-2 sr-1 peak_radiance
+Mura2024-25-43L,Gauwa Patera,-11.0,34.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.05,W m-2 sr-1 peak_radiance
+Mura2024-25-47M,Gauwa Patera,-11.0,34.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.05,W m-2 sr-1 peak_radiance
+Mura2024-41-41M,Manua Patera,38.0,35.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.03,W m-2 sr-1 peak_radiance
+Mura2024-41-43M,Manua Patera,38.0,35.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.09,W m-2 sr-1 peak_radiance
+Mura2024-41-47M,Manua Patera,38.0,35.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.05,W m-2 sr-1 peak_radiance
+Mura2024-8-41M,Amaterasu Patera,55.0,37.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.2,W m-2 sr-1 peak_radiance
+Mura2024-8-43M,Amaterasu Patera,55.0,37.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.2,W m-2 sr-1 peak_radiance
+Mura2024-8-47M,Amaterasu Patera,55.0,37.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.13,W m-2 sr-1 peak_radiance
+Mura2024-10-41M,Dusura Patera,-118.0,37.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.17,W m-2 sr-1 peak_radiance
+Mura2024-10-41L,Dusura Patera,-118.0,37.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-10-43M,Dusura Patera,-118.0,37.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.21,W m-2 sr-1 peak_radiance
+Mura2024-10-43L,Dusura Patera,-118.0,37.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-10-47M,Dusura Patera,-118.0,37.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.14,W m-2 sr-1 peak_radiance
+Mura2024-10-47L,Dusura Patera,-118.0,37.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-10-49M,Dusura Patera,-118.0,37.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.16,W m-2 sr-1 peak_radiance
+Mura2024-10-49L,Dusura Patera,-118.0,37.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-39-41M,Verbti Patera,-87.0,38.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.04,W m-2 sr-1 peak_radiance
+Mura2024-39-41L,Verbti Patera,-87.0,38.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-39-43M,Verbti Patera,-87.0,38.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.07,W m-2 sr-1 peak_radiance
+Mura2024-39-43L,Verbti Patera,-87.0,38.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-39-47M,Verbti Patera,-87.0,38.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.03,W m-2 sr-1 peak_radiance
+Mura2024-39-47L,Verbti Patera,-87.0,38.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-39-49M,Verbti Patera,-87.0,38.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.05,W m-2 sr-1 peak_radiance
+Mura2024-39-49L,Verbti Patera,-87.0,38.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.03,W m-2 sr-1 peak_radiance
+Mura2024-2-41M,Zal Patera A,-1.0,1.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.53,W m-2 sr-1 peak_radiance
+Mura2024-2-41L,Zal Patera A,-1.0,1.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.2,W m-2 sr-1 peak_radiance
+Mura2024-2-43M,Zal Patera A,-1.0,1.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.87,W m-2 sr-1 peak_radiance
+Mura2024-2-43L,Zal Patera A,-1.0,1.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.27,W m-2 sr-1 peak_radiance
+Mura2024-2-47M,Zal Patera A,-1.0,1.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.7,W m-2 sr-1 peak_radiance
+Mura2024-2-47L,Zal Patera A,-1.0,1.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.24,W m-2 sr-1 peak_radiance
+Mura2024-2-49M,Zal Patera A,-1.0,1.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.68,W m-2 sr-1 peak_radiance
+Mura2024-2-49L,Zal Patera A,-1.0,1.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.19,W m-2 sr-1 peak_radiance
+Mura2024-83-43M,Fo Patera B,169.0,40.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.03,W m-2 sr-1 peak_radiance
+Mura2024-83-43L,Fo Patera B,169.0,40.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-83-49M,Fo Patera B,169.0,40.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.02,W m-2 sr-1 peak_radiance
+Mura2024-35-43L,Zal Patera B,-73.0,41.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-35-47L,Zal Patera B,-73.0,41.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-35-49M,Zal Patera B,-73.0,41.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.15,W m-2 sr-1 peak_radiance
+Mura2024-65-41M,Lei-Kung H (PV13),146.0,42.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.02,W m-2 sr-1 peak_radiance
+Mura2024-65-41L,Lei-Kung H (PV13),146.0,42.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-65-43M,Lei-Kung H (PV13),146.0,42.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.01,W m-2 sr-1 peak_radiance
+Mura2024-65-43L,Lei-Kung H (PV13),146.0,42.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-69-43M,Fo Patera A,170.0,42.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.04,W m-2 sr-1 peak_radiance
+Mura2024-69-43L,Fo Patera A,170.0,42.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-69-49M,Fo Patera A,170.0,42.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.02,W m-2 sr-1 peak_radiance
+Mura2024-82-43M,Lei-Kung B P173/P174,158.0,42.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.02,W m-2 sr-1 peak_radiance
+Mura2024-82-43L,Lei-Kung B P173/P174,158.0,42.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-19-41M,Asis Patera,-92.0,44.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.1,W m-2 sr-1 peak_radiance
+Mura2024-19-41L,Asis Patera,-92.0,44.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.04,W m-2 sr-1 peak_radiance
+Mura2024-19-43M,Asis Patera,-92.0,44.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,1.09,W m-2 sr-1 peak_radiance
+Mura2024-19-43L,Asis Patera,-92.0,44.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.57,W m-2 sr-1 peak_radiance
+Mura2024-19-47M,Asis Patera,-92.0,44.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.16,W m-2 sr-1 peak_radiance
+Mura2024-19-47L,Asis Patera,-92.0,44.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.06,W m-2 sr-1 peak_radiance
+Mura2024-19-49M,Asis Patera,-92.0,44.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.22,W m-2 sr-1 peak_radiance
+Mura2024-19-49L,Asis Patera,-92.0,44.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.11,W m-2 sr-1 peak_radiance
+Mura2024-15-41M,Kinich Ahau Patera A,51.0,48.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.09,W m-2 sr-1 peak_radiance
+Mura2024-15-41L,Kinich Ahau Patera A,51.0,48.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-15-43M,Kinich Ahau Patera A,51.0,48.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.14,W m-2 sr-1 peak_radiance
+Mura2024-15-43L,Kinich Ahau Patera A,51.0,48.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.05,W m-2 sr-1 peak_radiance
+Mura2024-15-47M,Kinich Ahau Patera A,51.0,48.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.11,W m-2 sr-1 peak_radiance
+Mura2024-15-47L,Kinich Ahau Patera A,51.0,48.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.03,W m-2 sr-1 peak_radiance
+Mura2024-16-43L,Kinich Ahau Patera B,48.0,49.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.04,W m-2 sr-1 peak_radiance
+Mura2024-16-47M,Kinich Ahau Patera B,48.0,49.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.08,W m-2 sr-1 peak_radiance
+Mura2024-16-47L,Kinich Ahau Patera B,48.0,49.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.05,W m-2 sr-1 peak_radiance
+Mura2024-14-41M,Gurzil Patera,-48.0,50.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.09,W m-2 sr-1 peak_radiance
+Mura2024-14-41L,Gurzil Patera,-48.0,50.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.04,W m-2 sr-1 peak_radiance
+Mura2024-14-43M,Gurzil Patera,-48.0,50.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.13,W m-2 sr-1 peak_radiance
+Mura2024-14-43L,Gurzil Patera,-48.0,50.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.07,W m-2 sr-1 peak_radiance
+Mura2024-14-47M,Gurzil Patera,-48.0,50.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.12,W m-2 sr-1 peak_radiance
+Mura2024-14-47L,Gurzil Patera,-48.0,50.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.07,W m-2 sr-1 peak_radiance
+Mura2024-14-49M,Gurzil Patera,-48.0,50.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.19,W m-2 sr-1 peak_radiance
+Mura2024-52-41M,Lei-Kung E,141.0,50.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.03,W m-2 sr-1 peak_radiance
+Mura2024-52-41L,Lei-Kung E,141.0,50.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-52-43M,Lei-Kung E,141.0,50.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.02,W m-2 sr-1 peak_radiance
+Mura2024-52-47M,Lei-Kung E,141.0,50.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.01,W m-2 sr-1 peak_radiance
+Mura2024-52-49M,Lei-Kung E,141.0,50.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.02,W m-2 sr-1 peak_radiance
+Mura2024-5-41M,Tonatiuh A,-84.0,52.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.2,W m-2 sr-1 peak_radiance
+Mura2024-5-41L,Tonatiuh A,-84.0,52.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.04,W m-2 sr-1 peak_radiance
+Mura2024-5-43M,Tonatiuh A,-84.0,52.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.23,W m-2 sr-1 peak_radiance
+Mura2024-5-43L,Tonatiuh A,-84.0,52.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.06,W m-2 sr-1 peak_radiance
+Mura2024-5-47M,Tonatiuh A,-84.0,52.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.36,W m-2 sr-1 peak_radiance
+Mura2024-5-47L,Tonatiuh A,-84.0,52.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.12,W m-2 sr-1 peak_radiance
+Mura2024-5-49M,Tonatiuh A,-84.0,52.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.38,W m-2 sr-1 peak_radiance
+Mura2024-5-49L,Tonatiuh A,-84.0,52.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.12,W m-2 sr-1 peak_radiance
+Mura2024-6-41M,Tonatiuh C,-78.0,52.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.2,W m-2 sr-1 peak_radiance
+Mura2024-6-41L,Tonatiuh C,-78.0,52.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.08,W m-2 sr-1 peak_radiance
+Mura2024-28-41M,Dazhbog Patera,-2.0,1.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.05,W m-2 sr-1 peak_radiance
+Mura2024-28-41L,Dazhbog Patera,-2.0,1.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-28-43M,Dazhbog Patera,-2.0,1.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.05,W m-2 sr-1 peak_radiance
+Mura2024-28-49M,Dazhbog Patera,-2.0,1.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.11,W m-2 sr-1 peak_radiance
+Mura2024-24-41M,Tonatiuh B,-66.0,57.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.06,W m-2 sr-1 peak_radiance
+Mura2024-24-41L,Tonatiuh B,-66.0,57.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-24-43M,Tonatiuh B,-66.0,57.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.06,W m-2 sr-1 peak_radiance
+Mura2024-24-43L,Tonatiuh B,-66.0,57.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-24-47M,Tonatiuh B,-66.0,57.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.03,W m-2 sr-1 peak_radiance
+Mura2024-24-47L,Tonatiuh B,-66.0,57.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-24-49M,Tonatiuh B,-66.0,57.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.03,W m-2 sr-1 peak_radiance
+Mura2024-56-41M,Lei-Kung F,140.0,59.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.02,W m-2 sr-1 peak_radiance
+Mura2024-56-41L,Lei-Kung F,140.0,59.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-56-43M,Lei-Kung F,140.0,59.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.02,W m-2 sr-1 peak_radiance
+Mura2024-56-43L,Lei-Kung F,140.0,59.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-56-47M,Lei-Kung F,140.0,59.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.01,W m-2 sr-1 peak_radiance
+Mura2024-56-49M,Lei-Kung F,140.0,59.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.01,W m-2 sr-1 peak_radiance
+Mura2024-63-41M,Tvashtar B (P155),-118.0,59.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.01,W m-2 sr-1 peak_radiance
+Mura2024-63-43M,Tvashtar B (P155),-118.0,59.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.01,W m-2 sr-1 peak_radiance
+Mura2024-22-41M,Tvashtar D,-126.0,64.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.07,W m-2 sr-1 peak_radiance
+Mura2024-22-41L,Tvashtar D,-126.0,64.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-22-43M,Tvashtar D,-126.0,64.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.08,W m-2 sr-1 peak_radiance
+Mura2024-22-43L,Tvashtar D,-126.0,64.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-22-47M,Tvashtar D,-126.0,64.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.06,W m-2 sr-1 peak_radiance
+Mura2024-22-47L,Tvashtar D,-126.0,64.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.01,W m-2 sr-1 peak_radiance
+Mura2024-22-49M,Tvashtar D,-126.0,64.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.07,W m-2 sr-1 peak_radiance
+Mura2024-17-41M,Chors Patera,110.0,68.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.08,W m-2 sr-1 peak_radiance
+Mura2024-17-41L,Chors Patera,110.0,68.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-17-43M,Chors Patera,110.0,68.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.07,W m-2 sr-1 peak_radiance
+Mura2024-17-43L,Chors Patera,110.0,68.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-17-47M,Chors Patera,110.0,68.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.08,W m-2 sr-1 peak_radiance
+Mura2024-17-47L,Chors Patera,110.0,68.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.03,W m-2 sr-1 peak_radiance
+Mura2024-17-49M,Chors Patera,110.0,68.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.13,W m-2 sr-1 peak_radiance
+Mura2024-29-41M,Lei-Kung C,88.0,72.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.06,W m-2 sr-1 peak_radiance
+Mura2024-29-41L,Lei-Kung C,88.0,72.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-29-43M,Lei-Kung C,88.0,72.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.06,W m-2 sr-1 peak_radiance
+Mura2024-29-43L,Lei-Kung C,88.0,72.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-29-47M,Lei-Kung C,88.0,72.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.05,W m-2 sr-1 peak_radiance
+Mura2024-29-47L,Lei-Kung C,88.0,72.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.02,W m-2 sr-1 peak_radiance
+Mura2024-29-49M,Lei-Kung C,88.0,72.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.09,W m-2 sr-1 peak_radiance
+Mura2024-55-41M,Lei-Kung K,104.0,74.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.01,W m-2 sr-1 peak_radiance
+Mura2024-55-43M,Lei-Kung K,104.0,74.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.01,W m-2 sr-1 peak_radiance
+Mura2024-55-47M,Lei-Kung K,104.0,74.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.01,W m-2 sr-1 peak_radiance
+Mura2024-55-49M,Lei-Kung K,104.0,74.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.02,W m-2 sr-1 peak_radiance
+Mura2024-1-41M,Vivasvant Patera,68.0,75.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.61,W m-2 sr-1 peak_radiance
+Mura2024-1-41L,Vivasvant Patera,68.0,75.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.29,W m-2 sr-1 peak_radiance
+Mura2024-1-43M,Vivasvant Patera,68.0,75.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.28,W m-2 sr-1 peak_radiance
+Mura2024-1-43L,Vivasvant Patera,68.0,75.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.07,W m-2 sr-1 peak_radiance
+Mura2024-1-47M,Vivasvant Patera,68.0,75.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.36,W m-2 sr-1 peak_radiance
+Mura2024-1-47L,Vivasvant Patera,68.0,75.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,3.45,0.08,W m-2 sr-1 peak_radiance
+Mura2024-1-49M,Vivasvant Patera,68.0,75.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.23,W m-2 sr-1 peak_radiance
+Mura2024-45-41M,Pajonn Patera,-93.0,83.0,41,2022-04-09,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.02,W m-2 sr-1 peak_radiance
+Mura2024-45-43M,Pajonn Patera,-93.0,83.0,43,2022-07-05,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.02,W m-2 sr-1 peak_radiance
+Mura2024-45-47M,Pajonn Patera,-93.0,83.0,47,2022-12-15,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.01,W m-2 sr-1 peak_radiance
+Mura2024-45-49M,Pajonn Patera,-93.0,83.0,49,2023-03-01,,JIRAM,Mura et al. 2024 Table 2 peak radiance,4.78,0.02,W m-2 sr-1 peak_radiance
