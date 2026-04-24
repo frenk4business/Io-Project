@@ -24,6 +24,8 @@ COPY . .
 
 EXPOSE 8501
 
-CMD python -m features.build && streamlit run dashboard/app.py \
+CMD python -m preprocess.grid && \
+    python -m features.build && \
+    streamlit run dashboard/app.py \
     --server.address=0.0.0.0 \
     --server.port=${PORT:-8501}
