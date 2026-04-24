@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "io-hotspot-prediction"
+version = "0.1.0"
+description = "Multi-source planetary data pipeline for mapping and predicting volcanic hotspots on Io"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+keywords = ["planetary-science", "geospatial", "machine-learning", "io", "volcanism"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: GIS",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "pandas>=2.0",
+    "numpy>=1.25",
+    "scipy>=1.11",
+    "scikit-learn>=1.3",
+    "geopandas>=0.14",
+    "rasterio>=1.3",
+    "shapely>=2.0",
+    "pyarrow>=13.0",
+    "matplotlib>=3.7",
+    "streamlit>=1.28",
+    "plotly>=5.18",
+    "folium>=0.15",
+    "streamlit-folium>=0.15",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "ruff>=0.1",
+    "jupyterlab>=4.0",
+    "ipykernel>=6.25",
+    "cartopy>=0.22",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-q --tb=short"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "N",   # pep8 naming
+    "B",   # flake8-bugbear
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+    "N803",  # argument name should be lowercase (X is conventional for sklearn)
+    "N806",  # variable in function should be lowercase (X, y)
+]
+exclude = ["notebooks/", "docs/"]
+
+[tool.ruff.isort]
+known-first-party = [
+    "config",
+    "ingest",
+    "preprocess",
+    "features",
+    "models",
+    "visualization",
+    "dashboard",
+]

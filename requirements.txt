@@ -1,0 +1,23 @@
+# Pip fallback — conda (environment.yml) is recommended.
+# cartopy and rasterio may require manual GEOS/PROJ installation.
+# See: https://scitools.org.uk/cartopy/docs/latest/installing.html
+
+pandas>=2.0
+geopandas>=0.14
+rasterio>=1.3
+numpy>=1.25
+scipy>=1.11
+scikit-learn>=1.3
+matplotlib>=3.7
+cartopy>=0.22
+pyproj>=3.6
+shapely>=2.0
+fiona>=1.9
+pyarrow>=13.0
+streamlit>=1.28
+plotly>=5.18
+folium>=0.15
+streamlit-folium>=0.15
+pytest>=7.4
+jupyterlab>=4.0
+ipykernel>=6.25
