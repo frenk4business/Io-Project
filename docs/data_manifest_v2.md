@@ -11,6 +11,33 @@ Recommended external storage for uncommitted data:
 - Cloud storage or a manual artifact archive controlled by the project owner.
 - Original public source URLs where the file can be re-fetched reproducibly.
 
+## Required Production Dashboard Files
+
+The production Streamlit service expects these dashboard-ready files to exist before startup. Run `python scripts/check_dashboard_data.py` after Git checkout and external artifact restore.
+
+- `data/processed/base_grid_1deg.parquet`
+- `data/processed/feature_matrix.parquet`
+- `data/raw/io_volcanic_hotspots.csv`
+- `data/raw/io_hotspot_power.csv`
+- `data/processed/hotspots_1deg_grid.parquet`
+- `data/processed/power_grid_1deg.parquet`
+- `data/processed/io_coverage_corrected_cell_maps.parquet`
+- `data/processed/io_multi_instrument_coverage_cube.parquet`
+- `data/processed/io_thermal_activity_events.parquet`
+- `data/processed/jiram_observation_coverage.parquet`
+- `data/results/io_research_question_evaluation.md`
+- `data/results/io_metric_interpretation_summary.csv`
+- `data/results/io_metric_correlation_matrix.csv`
+- `data/results/io_rank_overlap.csv`
+- `data/results/io_js_divergence.csv`
+- `data/results/io_latitude_band_contributions.csv`
+- `data/results/io_top_n_cumulative_intensity.csv`
+- `data/results/io_power_concentration_summary.csv`
+- `data/external/nasa_io_3d/io_nasa.glb`
+- `data/external/nasa_io_3d/io_nasa_texture.png`
+- `data/models/logistic_regression.pkl`
+- `data/models/scaler.pkl`
+
 ## Runtime-Critical Derived Data
 
 These files make the dashboard fast and complete. They are derived from raw/source data and should be restored for Render unless the build step regenerates them.

@@ -1,0 +1,5 @@
+-r requirements.txt
+
+pytest>=7.4
+jupyterlab>=4.0
+ipykernel>=6.25

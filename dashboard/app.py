@@ -1,4 +1,4 @@
-﻿"""
+"""
 dashboard/app.py
 ----------------
 Streamlit dashboard scaffold for io-hotspot-prediction.
@@ -28,12 +28,22 @@ PROJECT_ROOT = Path(__file__).parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-RESULTS_DIR = PROJECT_ROOT / "data" / "results"
-
 import numpy as np
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
+from dashboard.data_loader import (
+    RESULTS_DIR,
+    combined_missing_file_diagnostic,
+    load_feature_matrix_cached,
+    load_hotspot_catalog_cached,
+    load_jiram_observation_coverage_cached,
+    load_model_cached,
+    load_power_grid_cached,
+    load_research_question_text_cached,
+    load_result_csv_cached,
+    load_saved_or_compute_time_activity_cached,
+)
 from dashboard.i18n import (
     DEFAULT_LANGUAGE,
     GROUP_LABEL_KEYS,
@@ -42,16 +52,6 @@ from dashboard.i18n import (
     language_label,
     option_labels,
     translate as t,
-)
-
-# ---------------------------------------------------------------------------
-# Page config
-# ---------------------------------------------------------------------------
-st.set_page_config(
-    page_title="Io Hotspot Prediction",
-    page_icon="ðŸŒ‹",
-    layout="wide",
-    initial_sidebar_state="collapsed",
 )
 
 # ---------------------------------------------------------------------------
@@ -202,117 +202,57 @@ def render_top_navigation() -> str:
     return page_name
 
 
-page = render_top_navigation()
 # ---------------------------------------------------------------------------
 # Data loading with caching
 # ---------------------------------------------------------------------------
 
-@st.cache_data(show_spinner="Loading hotspot catalog...")
 def get_catalog() -> pd.DataFrame | None:
     """Load hotspot catalog with graceful failure."""
     try:
-        from ingest.hotspot_catalog import load_hotspot_catalog
-        return load_hotspot_catalog()
+        return load_hotspot_catalog_cached()
     except FileNotFoundError:
         return None
-@st.cache_data(show_spinner="Loading feature matrix...")
+
+
 def get_feature_matrix() -> pd.DataFrame | None:
     try:
-        from features.build import load_feature_matrix
-        return load_feature_matrix()
+        return load_feature_matrix_cached()
     except FileNotFoundError:
         return None
 
 
 def show_feature_matrix_missing_error() -> None:
-    from config import FEATURE_MATRIX_FILENAME, PROCESSED_DIR
-
-    expected_path = PROCESSED_DIR / FEATURE_MATRIX_FILENAME
-    exists_label = "Yes" if expected_path.exists() else "No"
     st.error(
         "Feature matrix not loaded.\n\n"
-        f"- Expected file path: `{expected_path}`\n"
-        f"- Exists on this deployment: `{exists_label}`\n"
-        "- Suggested fix: commit the small processed artifact at "
-        "`data/processed/feature_matrix.parquet`, or update the Render build "
-        "command to run `python -m features.build` after installing requirements."
+        f"{combined_missing_file_diagnostic(('feature_matrix',))}"
     )
 
 
 def show_power_grid_missing_error() -> None:
-    from config import (
-        BASE_GRID_FILENAME,
-        POWER_CATALOG_FILENAME,
-        POWER_GRID_FILENAME,
-        PROCESSED_DIR,
-        RAW_DIR,
-    )
-
-    expected_paths = [
-        ("Power grid parquet", PROCESSED_DIR / POWER_GRID_FILENAME),
-        ("Base grid parquet", PROCESSED_DIR / BASE_GRID_FILENAME),
-        ("Thermal-emission proxy CSV", RAW_DIR / POWER_CATALOG_FILENAME),
-    ]
-    file_lines = "\n".join(
-        f"- {label}: `{path}` (exists: `{'Yes' if path.exists() else 'No'}`)"
-        for label, path in expected_paths
-    )
     st.error(
         "Estimated thermal-emission proxy data is not available.\n\n"
-        f"{file_lines}\n\n"
-        "Suggested fix: restore or commit the small runtime data files above. "
-        "To regenerate them locally, run `python -m preprocess.grid`, then "
-        "`python -m preprocess.power_grid` after restoring "
-        "`data/raw/io_hotspot_power.csv`."
+        f"{combined_missing_file_diagnostic(('power_grid', 'base_grid', 'thermal_proxy_csv'))}"
     )
 
 
 def show_catalog_missing_error() -> None:
-    from config import HOTSPOT_CATALOG_FILENAME, HOTSPOT_GRID_FILENAME, PROCESSED_DIR, RAW_DIR
-
-    expected_paths = [
-        ("Hotspot catalog CSV", RAW_DIR / HOTSPOT_CATALOG_FILENAME),
-        ("Hotspot grid parquet", PROCESSED_DIR / HOTSPOT_GRID_FILENAME),
-    ]
-    file_lines = "\n".join(
-        f"- {label}: `{path}` (exists: `{'Yes' if path.exists() else 'No'}`)"
-        for label, path in expected_paths
-    )
     st.error(
         "Hotspot catalog data is not available.\n\n"
-        f"{file_lines}\n\n"
-        "Suggested fix: restore or commit the small hotspot catalog file above. "
-        "To rebuild from source, run `python -m ingest.download`, then "
-        "`python -m preprocess.align_layers` after the base grid is present."
+        f"{combined_missing_file_diagnostic(('hotspot_catalog', 'hotspot_grid'))}"
     )
-@st.cache_data(show_spinner="Loading trained model...")
+
+
 def get_model() -> tuple | None:
     try:
-        from models.train import load_model
-        return load_model()
+        return load_model_cached()
     except FileNotFoundError:
         return None
-@st.cache_data(show_spinner="Loading power grid...")
+
+
 def get_power_grid() -> pd.DataFrame | None:
     try:
-        from preprocess.power_grid import (
-            assign_power_to_grid,
-            load_power_grid,
-            save_power_grid,
-        )
-        from ingest.power_catalog import load_power_catalog
-        from preprocess.grid import load_base_grid
-        return load_power_grid()
-    except FileNotFoundError:
-        try:
-            grid = load_base_grid()
-            power_catalog = load_power_catalog()
-            power_grid = assign_power_to_grid(grid, power_catalog)
-            save_power_grid(power_grid)
-            return power_grid
-        except Exception:
-            return None
-    except ImportError:
+        return load_power_grid_cached()
+    except (FileNotFoundError, ImportError):
         return None
 def page_overview_v2() -> None:
     language = get_language()
@@ -370,11 +310,11 @@ def page_2d_maps() -> None:
     with tab_observed:
         st.markdown(t("page.2d.observed.body", language))
         fig = plot_hotspot_catalog(catalog)
-        st.pyplot(fig, use_container_width=True)
+        st.pyplot(fig, width="stretch")
         plt.close(fig)
         with st.expander(t("page.2d.kde.expander", language), expanded=False):
             fig_kde = plot_kde_heatmap(catalog)
-            st.pyplot(fig_kde, use_container_width=True)
+            st.pyplot(fig_kde, width="stretch")
             plt.close(fig_kde)
             st.caption(t("page.2d.kde.note", language))
     with tab_model:
@@ -388,7 +328,7 @@ def page_2d_maps() -> None:
             X = feature_matrix[FEATURE_COLUMNS].fillna(0).values
             probabilities = model.predict_proba(scaler.transform(X))[:, 1]
             fig_model = plot_prediction_surface(feature_matrix, probabilities)
-            st.pyplot(fig_model, use_container_width=True)
+            st.pyplot(fig_model, width="stretch")
             plt.close(fig_model)
             st.warning(t("page.2d.model.warning", language))
             st.caption(t("page.2d.model.caption", language))
@@ -490,7 +430,7 @@ def page_3d_globe() -> None:
         color_by=color_by,
         unit_filter=unit_filter if unit_filter else None,
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
     if color_by == "io_appearance":
         st.caption(t("page.globe.caption.appearance", language))
         _render_io_appearance_legend(len(catalog), unit_filter)
@@ -528,10 +468,8 @@ def page_io_experience() -> None:
         return
 
     try:
-        import importlib
         import visualization.io_experience_3d as io_experience_3d
 
-        io_experience_3d = importlib.reload(io_experience_3d)
         SCENE_ORDER = io_experience_3d.SCENE_ORDER
         build_io_experience_3d = io_experience_3d.build_io_experience_3d
     except ImportError as exc:
@@ -610,7 +548,6 @@ def page_io_experience() -> None:
         try:
             import visualization.nasa_io_model_viewer as nasa_io_model_viewer
 
-            nasa_io_model_viewer = importlib.reload(nasa_io_model_viewer)
             nasa_asset_status = nasa_io_model_viewer.nasa_visual_asset_status()
             if not nasa_io_model_viewer.nasa_model_available():
                 st.warning(
@@ -670,7 +607,7 @@ def page_io_experience() -> None:
             min_power_gw=min_power_gw,
             language=language,
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     st.info(insights["scene_copy"])
 
@@ -720,7 +657,7 @@ def page_model_predictions() -> None:
     probabilities = model.predict_proba(X_scaled)[:, 1]
 
     fig = plot_prediction_surface(feature_matrix, probabilities)
-    st.pyplot(fig, use_container_width=True)
+    st.pyplot(fig, width="stretch")
     plt.close(fig)
 
     st.caption(
@@ -782,7 +719,7 @@ def page_feature_analysis() -> None:
     ax.tick_params(colors="white")
     ax.xaxis.label.set_color("white")
     ax.title.set_color("white")
-    st.pyplot(fig, use_container_width=True)
+    st.pyplot(fig, width="stretch")
     plt.close(fig)
 
     st.info(
@@ -868,16 +805,13 @@ def get_power_regression(
     return train_power_regression(_feature_matrix, _power_grid)
 
 
-@st.cache_data(show_spinner="Loading JIRAM observation coverage...")
 def get_jiram_observation_coverage() -> pd.DataFrame | None:
     try:
-        from ingest.jiram_coverage import load_jiram_observation_coverage
-        return load_jiram_observation_coverage()
+        return load_jiram_observation_coverage_cached()
     except (FileNotFoundError, ValueError):
         return None
 
 
-@st.cache_data(show_spinner="Computing time-resolved activity...")
 def get_time_resolved_activity(
     _feature_matrix: "pd.DataFrame",
     _power_grid: "pd.DataFrame",
@@ -885,56 +819,25 @@ def get_time_resolved_activity(
     instrument: str = "combined",
     time_bin: str = "all",
 ) -> dict:
-    from analysis.coverage_corrected_volcanism import compute_coverage_corrected_volcanism
-    from analysis.coverage_corrected_volcanism import save_coverage_corrected_outputs
-    from ingest.thermal_activity_events import load_activity_events, save_activity_events
-
-    activity_events, optional_status = load_activity_events(include_optional=True)
-    result = compute_coverage_corrected_volcanism(
+    return load_saved_or_compute_time_activity_cached(
         _feature_matrix,
-        activity_events,
-        jiram_coverage=_coverage,
-        min_observations=1,
+        _power_grid,
+        _coverage,
+        instrument,
+        time_bin,
+        allow_compute=False,
     )
-    try:
-        save_activity_events(activity_events)
-        save_coverage_corrected_outputs(result)
-    except Exception:
-        pass
-    comparison = result["comparison_metrics"]
-    result["cell_activity"] = result["cell_maps"]
-    result["regional_summary"] = comparison["latitude_band_contributions"]
-    result["comparison_summary"] = comparison["spearman_correlation"]
-    result["data_quality"]["optional_dataset_status_detail"] = optional_status
-    result["data_quality"]["named_hotspot_cells"] = int((_feature_matrix.get("has_hotspot", 0) > 0).sum())
-    result["data_quality"]["thermal_cells"] = int((result["cell_maps"]["occurrence_event_count"] > 0).sum())
-    result["available_instruments"] = result["data_quality"].get("coverage_instruments", [])
-    result["available_time_bins"] = sorted(result["coverage_cube"]["time_bin"].dropna().astype(str).unique().tolist())
-    return result
 
 
 def _load_result_csv(filename: str, columns: list[str]) -> pd.DataFrame:
     path = RESULTS_DIR / filename
-    if not path.exists():
-        return pd.DataFrame(columns=columns)
-    try:
-        return pd.read_csv(path)
-    except Exception:
-        return pd.DataFrame(columns=columns)
+    return load_result_csv_cached(path, tuple(columns))
 
 
-@st.cache_data(show_spinner=False)
 def get_research_question_evaluation_text() -> str:
-    path = RESULTS_DIR / "io_research_question_evaluation.md"
-    if not path.exists():
-        return ""
-    try:
-        return path.read_text(encoding="utf-8")
-    except Exception:
-        return ""
+    return load_research_question_text_cached()
 
 
-@st.cache_data(show_spinner=False)
 def get_metric_interpretation_summary() -> pd.DataFrame:
     return _load_result_csv(
         "io_metric_interpretation_summary.csv",
@@ -951,7 +854,6 @@ def get_metric_interpretation_summary() -> pd.DataFrame:
     )
 
 
-@st.cache_data(show_spinner=False)
 def get_power_concentration_summary() -> pd.DataFrame:
     return _load_result_csv(
         "io_power_concentration_summary.csv",
@@ -967,17 +869,14 @@ def get_power_concentration_summary() -> pd.DataFrame:
     )
 
 
-@st.cache_data(show_spinner=False)
 def get_metric_correlation_matrix() -> pd.DataFrame:
     return _load_result_csv("io_metric_correlation_matrix.csv", [])
 
 
-@st.cache_data(show_spinner=False)
 def get_rank_overlap_summary() -> pd.DataFrame:
     return _load_result_csv("io_rank_overlap.csv", [])
 
 
-@st.cache_data(show_spinner=False)
 def get_js_divergence_summary() -> pd.DataFrame:
     return _load_result_csv("io_js_divergence.csv", [])
 
@@ -1256,7 +1155,7 @@ def _render_lr_coefficients(model) -> None:
     ax.tick_params(colors="white")
     ax.xaxis.label.set_color("white")
     ax.title.set_color("white")
-    st.pyplot(fig, use_container_width=True)
+    st.pyplot(fig, width="stretch")
     plt.close(fig)
 
 
@@ -1350,7 +1249,7 @@ def page_scientific_analysis() -> None:
                 st.subheader(t("page.science.leakage_audit", language))
                 with st.spinner("Running leakage audit..."):
                     leakage_df = get_leakage_audit(feature_matrix)
-                st.dataframe(_style_leakage_table(leakage_df), use_container_width=True)
+                st.dataframe(_style_leakage_table(leakage_df), width="stretch")
                 st.caption(
                     "Red rows are flagged as `suspected_leakage`. "
                     "Threshold: |Pearson r| >= 0.6 OR |LR coefficient| >= 5.0 OR target-derived by construction."
@@ -1359,7 +1258,7 @@ def page_scientific_analysis() -> None:
                 st.subheader(t("page.science.ablation", language))
                 with st.spinner("Running ablation (this may take ~30 seconds)..."):
                     ablation = get_ablation(feature_matrix)
-                st.plotly_chart(_ablation_plotly_chart(ablation), use_container_width=True)
+                st.plotly_chart(_ablation_plotly_chart(ablation), width="stretch")
 
                 no_leak = next(
                     (fs for fs in ablation["feature_sets"] if fs["name"] == "no_leakage"),
@@ -1379,7 +1278,7 @@ def page_scientific_analysis() -> None:
                         fold_df.style.format(
                             {c: "{:.3f}" for c in ["Precision", "Recall", "F1", "AUC-ROC", "PR-AUC"]}
                         ),
-                        use_container_width=True,
+                        width="stretch",
                     )
 
                 with st.expander(t("page.science.coefficients", language), expanded=False):
@@ -1405,7 +1304,7 @@ def page_scientific_analysis() -> None:
                         "js_divergence": "{:.3f}",
                     }
                 ),
-                use_container_width=True,
+                width="stretch",
             )
 
         corr_df = get_metric_correlation_matrix()
@@ -1418,19 +1317,19 @@ def page_scientific_analysis() -> None:
             if corr_df.empty:
                 st.info("Spearman matrix not available.")
             else:
-                st.dataframe(corr_df, use_container_width=True)
+                st.dataframe(corr_df, width="stretch")
         with c2:
             st.subheader(t("page.time.comparison.rank", language))
             if rank_df.empty:
                 st.info("Rank-overlap table not available.")
             else:
-                st.dataframe(rank_df, use_container_width=True)
+                st.dataframe(rank_df, width="stretch")
 
         st.subheader(t("page.time.comparison.js", language))
         if js_df.empty:
             st.info("Jensen-Shannon divergence table not available.")
         else:
-            st.dataframe(js_df, use_container_width=True)
+            st.dataframe(js_df, width="stretch")
 
         st.subheader(t("page.science.power_concentration", language))
         if power_summary.empty:
@@ -1444,7 +1343,7 @@ def page_scientific_analysis() -> None:
                         "cumulative_fraction": "{:.1%}",
                     }
                 ),
-                use_container_width=True,
+                width="stretch",
             )
 
     # Tab 3: Supporting Spatial Evidence
@@ -1474,7 +1373,7 @@ def page_scientific_analysis() -> None:
         enr_img_path = plot_enrichment_bar(enr_df)
         st.image(str(enr_img_path), width="stretch")
 
-        st.dataframe(_style_enrichment_table(enr_df), use_container_width=True)
+        st.dataframe(_style_enrichment_table(enr_df), width="stretch")
 
         st.download_button(
             "Download enrichment table (CSV)",
@@ -1498,7 +1397,7 @@ def page_scientific_analysis() -> None:
                 "genuine absence of strong geological control."
             )
 
-    # â”€â”€ Tab 4: Spatial Point-Pattern Analysis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Tab 4: Spatial Point-Pattern Analysis ──────────────────────────────
     with tabs[2]:
         st.divider()
         if catalog is None:
@@ -1550,7 +1449,7 @@ def page_scientific_analysis() -> None:
             "nearest-neighbour distances than random."
         )
 
-    # â”€â”€ Tab 5: Hemispheric Asymmetry â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Tab 5: Hemispheric Asymmetry ────────────────────────────────────────
     with tabs[2]:
         st.divider()
         if catalog is None:
@@ -1594,15 +1493,15 @@ def page_scientific_analysis() -> None:
                 ] * len(row),
                 axis=1,
             ),
-            use_container_width=True,
+            width="stretch",
         )
         st.caption("Red rows: p_binom < 0.05 (two-sided exact binomial test). "
                    "ci_lo/ci_hi: 95% Clopper-Pearson CI on fraction_A.")
 
         st.divider()
         fig_lon, fig_lat = _asymmetry_plotly_histograms(asym)
-        st.plotly_chart(fig_lon, use_container_width=True)
-        st.plotly_chart(fig_lat, use_container_width=True)
+        st.plotly_chart(fig_lon, width="stretch")
+        st.plotly_chart(fig_lat, width="stretch")
         st.caption(
             f"Bootstrap 95% CIs from {500} catalogue resamples. "
             "Orange dashed lines: M3 (asthenosphere) model prediction maxima. "
@@ -1616,7 +1515,7 @@ def page_scientific_analysis() -> None:
             mime="text/csv",
         )
 
-    # â”€â”€ Tab 6: Coverage Bias â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Tab 6: Coverage Bias ────────────────────────────────────────────────
     with tabs[2]:
         st.subheader(t("page.science.coverage_bias", language))
         st.markdown(
@@ -1654,7 +1553,7 @@ def page_scientific_analysis() -> None:
                     "rate_ratio": "{:.3f}",
                 }
             ),
-            use_container_width=True,
+            width="stretch",
         )
         st.caption(
             "rate_ratio > 1: the raw hotspot density in this band is depressed by "
@@ -1684,7 +1583,7 @@ def page_scientific_analysis() -> None:
             "Contact: USGS Astrogeology Science Center."
         )
 
-    # â”€â”€ Tab 7: Tidal Hypothesis Comparison â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Tab 7: Tidal Hypothesis Comparison ─────────────────────────────────
     with tabs[2]:
         st.divider()
         st.subheader(t("page.science.hypothesis", language))
@@ -1713,7 +1612,7 @@ def page_scientific_analysis() -> None:
 
         hyp_df = get_hypothesis_comparison(feature_matrix)
 
-        # Î”AIC bar chart
+        # ΔAIC bar chart
         import plotly.graph_objects as go
 
         def _aic_colour(delta: float) -> str:
@@ -1745,7 +1644,7 @@ def page_scientific_analysis() -> None:
             height=380,
             margin=dict(l=180, r=80, t=60, b=40),
         )
-        st.plotly_chart(fig_hyp, use_container_width=True)
+        st.plotly_chart(fig_hyp, width="stretch")
 
         st.caption(
             "Burnham & Anderson (2002) thresholds: Delta AIC < 2 = substantial support (green); "
@@ -1778,7 +1677,7 @@ def page_scientific_analysis() -> None:
                     "lr_chi2": "{:.2f}",
                     "lr_p_value": "{:.4f}",
                 }),
-                use_container_width=True,
+                width="stretch",
             )
             st.download_button(
                 "Download hypothesis comparison (CSV)",
@@ -1824,7 +1723,7 @@ def page_scientific_analysis() -> None:
             st.dataframe(
                 pivot.style.map(_colour_survival, subset=survival_cols)
                 .format(format_cols),
-                use_container_width=True,
+                width="stretch",
             )
 
             # Fragile-claim alert
@@ -1853,7 +1752,7 @@ def page_scientific_analysis() -> None:
         else:
             st.info("No stability results available.")
 
-    # â”€â”€ Tab 8: Thermal Intensity â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Tab 8: Thermal Intensity ─────────────────────────────────────────
     with tabs[3]:
         st.subheader(t("page.science.thermal", language))
         st.warning(t("page.science.thermal.banner", language))
@@ -1890,7 +1789,7 @@ def page_scientific_analysis() -> None:
                     "fraction_total_power": "{:.1%}",
                 }
             ),
-            use_container_width=True,
+            width="stretch",
         )
         st.dataframe(
             suite["polar_sensitivity"].style.format(
@@ -1902,7 +1801,7 @@ def page_scientific_analysis() -> None:
                     "nonpolar_mean_primary_power_gw": "{:,.2f}",
                 }
             ),
-            use_container_width=True,
+            width="stretch",
         )
 
         st.subheader(t("page.science.thermal.geology", language))
@@ -1915,7 +1814,7 @@ def page_scientific_analysis() -> None:
                     "fraction_total_power": "{:.1%}",
                 }
             ),
-            use_container_width=True,
+            width="stretch",
         )
 
         st.subheader(t("page.science.thermal.outlier", language))
@@ -1930,7 +1829,7 @@ def page_scientific_analysis() -> None:
                     "max_remaining_primary_power_gw": "{:,.1f}",
                 }
             ),
-            use_container_width=True,
+            width="stretch",
         )
 
         st.divider()
@@ -1952,7 +1851,7 @@ def page_scientific_analysis() -> None:
                 ].style.format(
                     {"r2": "{:.3f}", "rmse": "{:.3f}", "mae": "{:.3f}", "spearman": "{:.3f}"}
                 ),
-                use_container_width=True,
+                width="stretch",
             )
 
             residuals = reg["residuals"]
@@ -2234,7 +2133,14 @@ def page_time_resolved_activity() -> None:
             else value,
         )
 
-    preview = get_time_resolved_activity(feature_matrix, power_grid, coverage)
+    try:
+        preview = get_time_resolved_activity(feature_matrix, power_grid, coverage)
+    except FileNotFoundError:
+        st.error(
+            "Time-resolved activity data is not available.\n\n"
+            f"{combined_missing_file_diagnostic(('activity_events', 'coverage_cell_maps', 'coverage_cube'))}"
+        )
+        return
     time_options = ["all"] + preview.get("available_time_bins", [])
     with filter_col2:
         selected_time_bin = st.selectbox(
@@ -2246,13 +2152,20 @@ def page_time_resolved_activity() -> None:
         )
         st.caption(t("page.time.filter.time_bin_note", language))
 
-    result = get_time_resolved_activity(
-        feature_matrix,
-        power_grid,
-        coverage,
-        selected_instrument,
-        selected_time_bin,
-    )
+    try:
+        result = get_time_resolved_activity(
+            feature_matrix,
+            power_grid,
+            coverage,
+            selected_instrument,
+            selected_time_bin,
+        )
+    except FileNotFoundError:
+        st.error(
+            "Time-resolved activity data is not available.\n\n"
+            f"{combined_missing_file_diagnostic(('activity_events', 'coverage_cell_maps', 'coverage_cube'))}"
+        )
+        return
     cell_activity = result["cell_activity"]
     cell_view = _coverage_layer_view(
         cell_activity,
@@ -2299,7 +2212,7 @@ def page_time_resolved_activity() -> None:
                     "events",
                     filter_col="occurrence_event_count",
                 ),
-                use_container_width=True,
+                width="stretch",
             )
             st.plotly_chart(
                 _activity_scatter(
@@ -2309,7 +2222,7 @@ def page_time_resolved_activity() -> None:
                     "unitless / coverage",
                     filter_col="selected_coverage_corrected",
                 ),
-                use_container_width=True,
+                width="stretch",
             )
         with c2:
             st.plotly_chart(
@@ -2320,19 +2233,19 @@ def page_time_resolved_activity() -> None:
                     "unitless percentile",
                     filter_col="selected_normalized_intensity",
                 ),
-                use_container_width=True,
+                width="stretch",
             )
             st.plotly_chart(
                 _activity_class_scatter(
                     cell_view.rename(columns={"activity_class": "persistence_class"}),
                     t("page.time.map.persistence", language),
                 ),
-                use_container_width=True,
+                width="stretch",
             )
     with tab_regions:
-        st.plotly_chart(_regional_activity_chart(regional_summary), use_container_width=True)
-        st.dataframe(regional_summary, use_container_width=True)
-        st.dataframe(comparison_summary, use_container_width=True)
+        st.plotly_chart(_regional_activity_chart(regional_summary), width="stretch")
+        st.dataframe(regional_summary, width="stretch")
+        st.dataframe(comparison_summary, width="stretch")
         st.download_button(
             t("page.time.download_region", language),
             data=regional_summary.to_csv(index=False).encode("utf-8"),
@@ -2349,20 +2262,20 @@ def page_time_resolved_activity() -> None:
         c1, c2 = st.columns(2)
         with c1:
             st.caption(t("page.time.comparison.correlation", language))
-            st.dataframe(comparison_metrics["spearman_correlation"], use_container_width=True)
+            st.dataframe(comparison_metrics["spearman_correlation"], width="stretch")
             st.caption(t("page.time.comparison.rank", language))
-            st.dataframe(comparison_metrics["rank_overlap"], use_container_width=True)
+            st.dataframe(comparison_metrics["rank_overlap"], width="stretch")
             if "metric_interpretation_summary" in comparison_metrics:
                 st.caption(t("page.time.comparison.interpretation", language))
-                st.dataframe(comparison_metrics["metric_interpretation_summary"], use_container_width=True)
+                st.dataframe(comparison_metrics["metric_interpretation_summary"], width="stretch")
         with c2:
             st.caption(t("page.time.comparison.js", language))
-            st.dataframe(comparison_metrics["js_divergence"], use_container_width=True)
+            st.dataframe(comparison_metrics["js_divergence"], width="stretch")
             st.caption(t("page.time.comparison.topn", language))
-            st.dataframe(comparison_metrics["top_n_cumulative"].head(50), use_container_width=True)
+            st.dataframe(comparison_metrics["top_n_cumulative"].head(50), width="stretch")
             if "power_concentration_summary" in comparison_metrics:
                 st.caption(t("page.time.comparison.power", language))
-                st.dataframe(comparison_metrics["power_concentration_summary"], use_container_width=True)
+                st.dataframe(comparison_metrics["power_concentration_summary"], width="stretch")
     with tab_quality:
         st.json(data_quality)
         quality_cols = [
@@ -2386,7 +2299,7 @@ def page_time_resolved_activity() -> None:
         quality_cols = [col for col in quality_cols if col in cell_activity.columns]
         st.dataframe(
             cell_activity[quality_cols].head(1000),
-            use_container_width=True,
+            width="stretch",
         )
         st.download_button(
             t("page.time.download_cell", language),
@@ -2458,26 +2371,36 @@ def page_faq() -> None:
             st.markdown(t(answer_key, language))
     st.divider()
     st.caption(t("page.faq.footer", language))
-# ---------------------------------------------------------------------------
-# Router
-# ---------------------------------------------------------------------------
 
-if page == "Overview":
-    page_overview_v2()
-elif page == "2D Maps":
-    page_2d_maps()
-elif page == "3D Globe":
-    page_3d_globe()
-elif page == "Io Experience":
-    page_io_experience()
-elif page == "Scientific Analysis":
-    page_scientific_analysis()
-elif page == "Time-Resolved Activity":
-    page_time_resolved_activity()
-elif page == "About":
-    page_about_v2()
-elif page == "FAQ":
-    page_faq()
+
+def main() -> None:
+    st.set_page_config(
+        page_title="Io Hotspot Prediction",
+        page_icon="🌋",
+        layout="wide",
+        initial_sidebar_state="collapsed",
+    )
+    page = render_top_navigation()
+    if page == "Overview":
+        page_overview_v2()
+    elif page == "2D Maps":
+        page_2d_maps()
+    elif page == "3D Globe":
+        page_3d_globe()
+    elif page == "Io Experience":
+        page_io_experience()
+    elif page == "Scientific Analysis":
+        page_scientific_analysis()
+    elif page == "Time-Resolved Activity":
+        page_time_resolved_activity()
+    elif page == "About":
+        page_about_v2()
+    elif page == "FAQ":
+        page_faq()
+
+
+if __name__ == "__main__":
+    main()
 
 
 

@@ -202,6 +202,17 @@ def test_asymmetry_histogram_bin_counts_sum_to_catalog(tiny_catalog):
     assert lat_total == n, f"Lat histogram total {lat_total} != {n}"
 
 
+def test_asymmetry_empty_catalog_with_no_bootstrap_does_not_raise():
+    from analysis.asymmetry import compute_asymmetry
+
+    empty = pd.DataFrame({"longitude": [], "latitude": []})
+    results = compute_asymmetry(empty, n_boot=0, seed=42)
+
+    assert results["n_hotspots"] == 0
+    assert float(results["lon_histogram"]["counts"].sum()) == 0.0
+    assert all(test["interpretation"] == "no data" for test in results["binomial_tests"])
+
+
 # ---------------------------------------------------------------------------
 # 5. Coverage bias — all rates must be non-negative
 # ---------------------------------------------------------------------------
@@ -379,3 +390,20 @@ def test_catalog_stability_survival_rate_bounds(tiny_feature_matrix, tiny_catalo
     assert df["survival_rate"].between(0.0, 1.0).all(), (
         "survival_rate out of [0, 1] range"
     )
+
+
+def test_catalog_stability_empty_catalog_skips_without_spam(tiny_feature_matrix, caplog):
+    from analysis.catalog_stability import catalog_jackknife
+
+    empty = pd.DataFrame({"longitude": [], "latitude": []})
+    df = catalog_jackknife(
+        tiny_feature_matrix,
+        empty,
+        retention_fractions=(0.9,),
+        n_replicates=5,
+        seed=0,
+    )
+
+    assert df.empty
+    assert "Catalogue jackknife skipped" in caplog.text
+    assert "Asymmetry failed in replicate" not in caplog.text

@@ -92,6 +92,10 @@ def catalog_jackknife(
     rng = np.random.default_rng(seed)
     n = len(catalog)
     records: list[dict] = []
+    _SCHEMA = ["fraction_retained", "metric", "survival_rate", "summary"]
+    if n == 0:
+        logger.warning("Catalogue jackknife skipped: hotspot catalogue is empty.")
+        return pd.DataFrame(columns=_SCHEMA)
 
     # Need per-cell hotspot positions; rebuild from catalog each replicate.
     # Cheap approach: for each replicate, re-label has_hotspot in-place using
@@ -112,6 +116,10 @@ def catalog_jackknife(
         p_subj: list[float] = []
         p_lead: list[float] = []
         p_north: list[float] = []
+        enrichment_failures = 0
+        asymmetry_failures = 0
+        first_enrichment_error: str | None = None
+        first_asymmetry_error: str | None = None
 
         for rep in range(n_replicates):
             idx = rng.choice(n, size=keep_n, replace=False)
@@ -140,7 +148,9 @@ def catalog_jackknife(
                     if is_sig:
                         enrichment_hits[unit] += 1
             except Exception as exc:
-                logger.warning("Enrichment failed in replicate: %s", exc)
+                enrichment_failures += 1
+                if first_enrichment_error is None:
+                    first_enrichment_error = str(exc)
 
             try:
                 asym = _recompute_asymmetry(sub_cat.reset_index(drop=True))
@@ -153,7 +163,26 @@ def catalog_jackknife(
                     elif "Northern" in c:
                         p_north.append(float(t["p_binom"]))
             except Exception as exc:
-                logger.warning("Asymmetry failed in replicate: %s", exc)
+                asymmetry_failures += 1
+                if first_asymmetry_error is None:
+                    first_asymmetry_error = str(exc)
+
+        if enrichment_failures:
+            logger.warning(
+                "Enrichment unavailable for %d/%d replicates at fraction_retained=%.2f. First error: %s",
+                enrichment_failures,
+                n_replicates,
+                f,
+                first_enrichment_error,
+            )
+        if asymmetry_failures:
+            logger.warning(
+                "Asymmetry unavailable for %d/%d replicates at fraction_retained=%.2f. First error: %s",
+                asymmetry_failures,
+                n_replicates,
+                f,
+                first_asymmetry_error,
+            )
 
         # Summarise enrichment: fraction of replicates each unit was significant
         for unit, hits in enrichment_hits.items():
@@ -189,7 +218,6 @@ def catalog_jackknife(
                 }
             )
 
-    _SCHEMA = ["fraction_retained", "metric", "survival_rate", "summary"]
     if not records:
         return pd.DataFrame(columns=_SCHEMA)
     out = pd.DataFrame.from_records(records)[_SCHEMA]

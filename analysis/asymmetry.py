@@ -125,6 +125,9 @@ def _bootstrap_histogram(
     n = len(values)
     counts_obs, _ = np.histogram(values, bins=bin_edges)
     bin_centres = 0.5 * (bin_edges[:-1] + bin_edges[1:])
+    if n_boot <= 0:
+        counts = counts_obs.astype(float)
+        return bin_centres, counts, counts.copy(), counts.copy()
 
     boot_counts = np.empty((n_boot, len(bin_centres)), dtype=float)
     for i in range(n_boot):

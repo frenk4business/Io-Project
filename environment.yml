@@ -22,7 +22,7 @@ dependencies:
   - pytest
   - pip
   - pip:
-      - streamlit>=1.28
+      - streamlit>=1.53
       - folium>=0.15
       - streamlit-folium>=0.15
       - pyarrow>=13.0  # for parquet support
