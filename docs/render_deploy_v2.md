@@ -30,14 +30,15 @@ If the existing Render v1 service uses Docker, keep that configuration unchanged
 
 ## Required Data Restore Step
 
-The repository intentionally does not commit ignored raw files, most processed parquet files, or bulk source extraction caches. The small runtime-critical feature matrix and Explore Io power-grid files are committed so Render can load the same feature and thermal-emission proxy data as local without a rebuild. Before launching the full v2 dashboard, restore any remaining files listed in `docs/data_manifest_v2.md` that are still marked `committed_to_github = No`.
+The repository intentionally does not commit ignored raw files, most processed parquet files, or bulk source extraction caches. The small runtime-critical feature matrix, Explore Io power-grid files, and Explore Io hotspot catalog files are committed so Render can load the same feature, thermal-emission proxy, and hotspot coordinate data as local without a rebuild. Before launching the full v2 dashboard, restore any remaining files listed in `docs/data_manifest_v2.md` that are still marked `committed_to_github = No`.
 
 Minimum runtime restore for full dashboard behavior:
 
 - `data/processed/base_grid_1deg.parquet` (committed; restored by Git checkout)
 - `data/processed/feature_matrix.parquet` (committed; restored by Git checkout)
 - `data/raw/io_hotspot_power.csv` (committed; restored by Git checkout)
-- `data/processed/hotspots_1deg_grid.parquet`
+- `data/raw/io_volcanic_hotspots.csv` (committed; restored by Git checkout)
+- `data/processed/hotspots_1deg_grid.parquet` (committed; restored by Git checkout)
 - `data/processed/power_grid_1deg.parquet` (committed; restored by Git checkout)
 - `data/processed/io_coverage_corrected_cell_maps.parquet`
 - `data/processed/io_multi_instrument_coverage_cube.parquet`

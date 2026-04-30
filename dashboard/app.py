@@ -265,6 +265,26 @@ def show_power_grid_missing_error() -> None:
         "`python -m preprocess.power_grid` after restoring "
         "`data/raw/io_hotspot_power.csv`."
     )
+
+
+def show_catalog_missing_error() -> None:
+    from config import HOTSPOT_CATALOG_FILENAME, HOTSPOT_GRID_FILENAME, PROCESSED_DIR, RAW_DIR
+
+    expected_paths = [
+        ("Hotspot catalog CSV", RAW_DIR / HOTSPOT_CATALOG_FILENAME),
+        ("Hotspot grid parquet", PROCESSED_DIR / HOTSPOT_GRID_FILENAME),
+    ]
+    file_lines = "\n".join(
+        f"- {label}: `{path}` (exists: `{'Yes' if path.exists() else 'No'}`)"
+        for label, path in expected_paths
+    )
+    st.error(
+        "Hotspot catalog data is not available.\n\n"
+        f"{file_lines}\n\n"
+        "Suggested fix: restore or commit the small hotspot catalog file above. "
+        "To rebuild from source, run `python -m ingest.download`, then "
+        "`python -m preprocess.align_layers` after the base grid is present."
+    )
 @st.cache_data(show_spinner="Loading trained model...")
 def get_model() -> tuple | None:
     try:
@@ -337,7 +357,7 @@ def page_2d_maps() -> None:
     catalog = get_catalog()
     feature_matrix = get_feature_matrix()
     if catalog is None:
-        st.error(t("common.error.catalog_missing", language))
+        show_catalog_missing_error()
         return
     if feature_matrix is None:
         show_feature_matrix_missing_error()
@@ -416,7 +436,7 @@ def page_3d_globe() -> None:
     catalog = get_catalog()
     feature_matrix = get_feature_matrix()
     if catalog is None:
-        st.error(t("common.error.catalog_missing", language))
+        show_catalog_missing_error()
         return
     if feature_matrix is None:
         show_feature_matrix_missing_error()

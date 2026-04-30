@@ -19,7 +19,7 @@ These files make the dashboard fast and complete. They are derived from raw/sour
 |---|---|---:|---|---|---|---|
 | `data/processed/base_grid_1deg.parquet` | Shared 1 deg Io longitude-latitude grid; rebuild input for the Explore Io thermal-emission proxy grid. | ~406 KB | Yes | Yes | Not needed | Restored automatically by Git checkout on Render. Regenerate with `python -m preprocess.grid` if missing locally. |
 | `data/processed/feature_matrix.parquet` | Main merged feature table for dashboard maps and older model diagnostics; this is the feature matrix loaded by `dashboard/app.py`. | ~1.3 MB | Yes | Yes | Not needed | Restored automatically by Git checkout on Render. If it is missing locally, regenerate with `python -m features.build` after restoring raw/source inputs, then commit only this processed parquet artifact. |
-| `data/processed/hotspots_1deg_grid.parquet` | Named hotspot occurrence mapped to the common 1 deg grid. | ~413 KB | Yes | No | Render persistent disk or v2 GitHub Release data asset | Regenerate from `data/raw/io_volcanic_hotspots.csv`. |
+| `data/processed/hotspots_1deg_grid.parquet` | Named hotspot occurrence mapped to the common 1 deg grid; supporting Explore Io map/globe hotspot layer. | ~413 KB | Yes | Yes | Not needed | Restored automatically by Git checkout on Render. Regenerate from `data/raw/io_volcanic_hotspots.csv` with `python -m preprocess.align_layers` if missing locally. |
 | `data/processed/power_grid_1deg.parquet` | Estimated thermal-emission proxy mapped to the common 1 deg grid; primary Explore Io power layer. | ~433 KB | Yes | Yes | Not needed | Restored automatically by Git checkout on Render. Regenerate with `python -m preprocess.power_grid` after `data/raw/io_hotspot_power.csv` and `data/processed/base_grid_1deg.parquet` are present. |
 | `data/processed/io_coverage_corrected_cell_maps.parquet` | Main v2 metric comparison table with occurrence, intensity, and metadata-normalized activity fields. | ~517 KB | Yes | No | Render persistent disk or v2 GitHub Release data asset | Regenerate with `analysis.coverage_corrected_volcanism`. Despite the legacy filename, dashboard wording should treat it as metadata-normalized. |
 | `data/processed/io_multi_instrument_coverage_cube.parquet` | Metadata observation cube for instrument/product/time-bin activity summaries. | ~50 KB | Yes | No | Render persistent disk or v2 GitHub Release data asset | Regenerate with `ingest.observation_coverage_cube`. |
@@ -46,11 +46,11 @@ These outputs are small enough to commit and are used by the Science and Metric 
 
 ## Raw Rebuild Inputs
 
-Raw files are required only if the processed parquet artifacts are regenerated. They are intentionally not committed because `data/raw/` is ignored.
+Raw files are required only if the processed parquet artifacts are regenerated. Most of `data/raw/` is ignored, but the small curated runtime inputs marked committed are intentionally kept in Git for Render parity.
 
 | file_path | purpose | approx_size | required_for_full_dashboard | committed_to_github | external_storage_if_not_committed | restore_or_regenerate_notes |
 |---|---|---:|---|---|---|---|
-| `data/raw/io_volcanic_hotspots.csv` | Named hotspot catalogue input for occurrence layers. | ~14 KB | Needed for rebuild | No | v2 data archive or source catalogue URL | Restore before running hotspot alignment preprocessing. |
+| `data/raw/io_volcanic_hotspots.csv` | Small curated named hotspot catalogue input used by Explore Io 2D Maps and 3D Globe. | ~14 KB | Yes | Yes | Not needed | Restored automatically by Git checkout on Render. Regenerate or refresh with `python -m ingest.download` if source data changes. |
 | `data/raw/io_hotspot_power.csv` | Small curated Davies/JIRAM estimated thermal-emission proxy input used to rebuild `power_grid_1deg.parquet`; not a bulk raw/source archive. | ~76 KB | Needed for rebuild | Yes | Not needed | Restored automatically by Git checkout on Render. Keep larger raw/source downloads excluded. |
 | `data/raw/io_hotspot_radiance_davies2024.csv` | Davies/JIRAM radiance-derived thermal proxy input. | ~59 KB | Needed for rebuild | No | v2 data archive or Davies/JIRAM source supplement | Restore before regenerating multi-instrument thermal events. |
 | `data/raw/mura_2024_hotspot_timeseries.csv` | Mura 2024 JIRAM hotspot temporal/radiance extraction. | ~39 KB | Needed for rebuild | No | v2 data archive or Mura source extraction | Restore before regenerating thermal event rows. |
