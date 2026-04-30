@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://pds.nasa.gov/pds4/pds/v1/PDS4_PDS_1F00.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<Product_Bundle  xmlns="http://pds.nasa.gov/pds4/pds/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pds.nasa.gov/pds4/pds/v1 https://pds.nasa.gov/pds4/pds/v1/PDS4_PDS_1F00.xsd">
+    <Identification_Area>
+        <logical_identifier>urn:nasa:pds:go_nims_io_rad</logical_identifier>
+        <version_id>1.0</version_id>
+        <title>Galileo NIMS Hot Spot Spectral Radiance Bundle</title>
+        <information_model_version>1.15.0.0</information_model_version>
+        <product_class>Product_Bundle</product_class>
+        <Citation_Information>
+            <author_list>Davies, A.; Veeder, G.</author_list>
+            <editor_list>Neakrase, L.; Huber, L.</editor_list>
+            <publication_year>2023</publication_year>
+            <doi>10.17189/0nzm-2g48</doi>
+            <keyword>Galileo, NIMS, radiance, Io</keyword>
+            <description>Hot spot spectral radiance derived from Galileo NIMS observations of Io</description>
+        </Citation_Information>
+        <Modification_History>
+            <Modification_Detail>
+                <modification_date>2023-04-12</modification_date>
+                <version_id>1.0</version_id>
+                <description>Initial Creation</description>
+            </Modification_Detail>
+        </Modification_History>
+    </Identification_Area>
+    <Context_Area>
+        <Time_Coordinates>
+            <start_date_time>1996-06-28Z</start_date_time>
+            <stop_date_time>2001-10-16Z</stop_date_time>
+        </Time_Coordinates>
+        <Investigation_Area>
+            <name>Galileo Mission</name>
+            <type>Mission</type>
+            <Internal_Reference>
+                <lid_reference>urn:nasa:pds:context:investigation:mission.galileo</lid_reference>
+                <reference_type>bundle_to_investigation</reference_type>
+            </Internal_Reference>
+        </Investigation_Area>
+        <Observing_System>
+            <Observing_System_Component>
+                <name>Galileo Orbiter</name>
+                <type>Host</type>
+                <Internal_Reference>
+                    <lid_reference>urn:nasa:pds:context:instrument_host:spacecraft.go</lid_reference>
+                    <reference_type>is_instrument_host</reference_type>
+                </Internal_Reference>
+            </Observing_System_Component>
+            <Observing_System_Component>
+                <name>Near Infrared Mapping Spectrometer</name>
+                <type>Instrument</type>
+                <Internal_Reference>
+                    <lid_reference>urn:nasa:pds:context:instrument:go.nims</lid_reference>
+                    <reference_type>is_instrument</reference_type>
+                </Internal_Reference>
+            </Observing_System_Component>
+        </Observing_System>
+        <Target_Identification>
+            <name>Io</name>
+            <type>Satellite</type>
+            <Internal_Reference>
+                <lid_reference>urn:nasa:pds:context:target:satellite.jupiter.io</lid_reference>
+                <reference_type>data_to_target</reference_type>
+            </Internal_Reference>
+        </Target_Identification>
+    </Context_Area>
+    <Reference_List>
+        <Internal_Reference>
+            <lid_reference>urn:nasa:pds:context:resource:resource.go_nims_io_rad_online</lid_reference>
+            <reference_type>has_resource</reference_type>
+        </Internal_Reference>
+        <Internal_Reference>
+            <lid_reference>urn:nasa:pds:go_nims_io_rad:document:user_guide</lid_reference>
+            <reference_type>bundle_to_document</reference_type>
+        </Internal_Reference>
+        <External_Reference>
+            <doi>10.1029/2023JE007839</doi>
+            <reference_text>Davies, A. G. and G. J. Veeder, 2023, Near Infrared Spectral Radiance at Multiple Wavelengths from Io’s Volcanoes 1: The Low Spatial 
+                Resolution Night-Time Galileo NIMS Data Set, Journal of Geophysical Research: Planets, 128, e2023JE007839, doi:10.1029/2023JE007839</reference_text>
+        </External_Reference>
+    </Reference_List>
+    <Bundle>
+        <bundle_type>Archive</bundle_type>
+    </Bundle>
+    <Bundle_Member_Entry>
+        <lid_reference>urn:nasa:pds:go_nims_io_rad:data_derived</lid_reference>
+        <member_status>Primary</member_status>
+        <reference_type>bundle_has_data_collection</reference_type>
+    </Bundle_Member_Entry>
+    <Bundle_Member_Entry>
+        <lid_reference>urn:nasa:pds:go_nims_io_rad:document</lid_reference>
+        <member_status>Primary</member_status>
+        <reference_type>bundle_has_document_collection</reference_type>
+    </Bundle_Member_Entry>
+    <Bundle_Member_Entry>
+        <lid_reference>urn:nasa:pds:go_nims_io_rad:context</lid_reference>
+        <member_status>Primary</member_status>
+        <reference_type>bundle_has_context_collection</reference_type>
+    </Bundle_Member_Entry>
+    <Bundle_Member_Entry>
+        <lid_reference>urn:nasa:pds:go_nims_io_rad:xml_schema</lid_reference>
+        <member_status>Primary</member_status>
+        <reference_type>bundle_has_schema_collection</reference_type>
+    </Bundle_Member_Entry>
+</Product_Bundle>

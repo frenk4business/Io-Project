@@ -207,4 +207,66 @@ and 60 were expected to improve southern/polar coverage, but a fully processed
 public hotspot catalogue for those later close flybys was not found during this
 data pass.
 
-**Status:** [x] PDF downloaded  [ ] Tables extracted  [ ] Integrated with pipeline
+**Extraction method:**  
+The current pipeline first attempts to parse static HTML tables from the
+Frontiers article. Because the production article page is dynamically rendered,
+the implemented fallback extracts Table 2 from the PDF using `pdftotext
+-layout`, preserving the source units as peak radiance (`W m-2 sr-1`) and
+converting West longitude to the project's `[-180, 180]` convention.
+
+**Normalized file:** `data/raw/mura_2024_hotspot_timeseries.csv`
+
+**Status:** [x] PDF downloaded  [x] Table 2 extracted  [x] Integrated with pipeline
+
+---
+
+## 7. Galileo NIMS Io Hot Spot Spectral Radiance
+
+**PDS collection:**  
+https://pds.nasa.gov/ds-view/pds/viewCollection.jsp?identifier=urn%3Anasa%3Apds%3Ago_nims_io_rad%3Adata_derived&version=1.0
+
+**PDS Atmospheres access page:**  
+https://pds-atmospheres.nmsu.edu/data_and_services/atmospheres_data/Galileo/nims.html
+
+**Downloaded metadata/source files:**
+- `data/external/galileo_nims/collection_go_nims_io_rad_data_derived_inventory.csv`
+- `data/external/galileo_nims/bundle_go_nims_io_rad.xml`
+- `data/external/galileo_nims/galileo_night_converted_log.xlsx` (local cache; ignored by Git)
+- selected converted CSV spectra under `data/external/galileo_nims/products/` (ignored by Git)
+
+**Normalized file:** `data/raw/galileo_nims_io_hotspot_spectral_radiance.csv`
+
+**Extraction method:**  
+The parser uses the PDS Atmospheres nighttime converted Excel log for product
+metadata, downloads selected small converted CSV spectra, and stores the maximum
+spectral radiance per product. Product targets are matched to the existing
+USGS/SIM3168 hotspot coordinate table by name where possible.
+
+**Scientific note:**  
+Values are NIMS spectral radiance products, not bolometric radiant power.
+
+**Status:** [x] Inventory downloaded  [x] Selected spectra parsed  [x] Integrated with pipeline
+
+---
+
+## 8. Ground-Based AO Hotspot Brightness, de Kleer et al. (2019)
+
+**Article / repository:**  
+https://authors.library.caltech.edu/records/cwxa2-29g80/latest  
+https://doi.org/10.3847/1538-3881/ab2380
+
+**Machine-readable Table 5:**  
+https://content.cld.iop.org/journals/1538-3881/158/1/29/revision1/ajab2380t5_mrt.txt
+
+**Normalized file:** `data/raw/ground_based_ao_io_hotspots.csv`
+
+**Extraction method:**  
+The parser reads the AAS MRT Table 5 fixed-width data and creates one event per
+site/date/filter brightness measurement. West longitudes are converted to the
+project convention.
+
+**Scientific note:**  
+AO values are filter brightness / spectral-radiance-style measurements in
+`GW/um/sr`; no bolometric power conversion is applied.
+
+**Status:** [x] MRT downloaded  [x] Parsed  [x] Integrated with pipeline

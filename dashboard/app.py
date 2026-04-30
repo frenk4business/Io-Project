@@ -28,6 +28,8 @@ PROJECT_ROOT = Path(__file__).parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+RESULTS_DIR = PROJECT_ROOT / "data" / "results"
+
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -57,7 +59,7 @@ st.set_page_config(
 # ---------------------------------------------------------------------------
 NAV_GROUPS: dict[str, list[str]] = {
     "Explore Io": ["Io Experience", "2D Maps", "3D Globe"],
-    "Science": ["Scientific Analysis"],
+    "Science": ["Scientific Analysis", "Time-Resolved Activity"],
     "Info": ["About", "FAQ"],
 }
 
@@ -220,6 +222,21 @@ def get_feature_matrix() -> pd.DataFrame | None:
         return load_feature_matrix()
     except FileNotFoundError:
         return None
+
+
+def show_feature_matrix_missing_error() -> None:
+    from config import FEATURE_MATRIX_FILENAME, PROCESSED_DIR
+
+    expected_path = PROCESSED_DIR / FEATURE_MATRIX_FILENAME
+    exists_label = "Yes" if expected_path.exists() else "No"
+    st.error(
+        "Feature matrix not loaded.\n\n"
+        f"- Expected file path: `{expected_path}`\n"
+        f"- Exists on this deployment: `{exists_label}`\n"
+        "- Suggested fix: commit the small processed artifact at "
+        "`data/processed/feature_matrix.parquet`, or update the Render build "
+        "command to run `python -m features.build` after installing requirements."
+    )
 @st.cache_data(show_spinner="Loading trained model...")
 def get_model() -> tuple | None:
     try:
@@ -295,7 +312,7 @@ def page_2d_maps() -> None:
         st.error(t("common.error.catalog_missing", language))
         return
     if feature_matrix is None:
-        st.error(t("page.iox.error.feature_missing", language))
+        show_feature_matrix_missing_error()
         return
     from visualization.hotspot_map import plot_hotspot_catalog, plot_kde_heatmap, plot_prediction_surface
     tab_observed, tab_model = st.tabs([
@@ -374,7 +391,7 @@ def page_3d_globe() -> None:
         st.error(t("common.error.catalog_missing", language))
         return
     if feature_matrix is None:
-        st.error(t("page.iox.error.feature_missing", language))
+        show_feature_matrix_missing_error()
         return
     layer_labels = {key: t(label_key, language) for key, label_key in _LAYER_LABEL_KEYS.items()}
     with st.expander(t("page.globe.controls", language), expanded=True):
@@ -456,7 +473,7 @@ def page_io_experience() -> None:
     feature_matrix = get_feature_matrix()
     power_grid = get_power_grid()
     if feature_matrix is None:
-        st.error(t("page.iox.error.feature_missing", language))
+        show_feature_matrix_missing_error()
         return
     if power_grid is None:
         st.error(t("page.iox.error.power_missing", language))
@@ -644,7 +661,7 @@ def page_model_predictions() -> None:
     model, scaler = result
 
     if feature_matrix is None:
-        st.error(t("page.iox.error.feature_missing", language))
+        show_feature_matrix_missing_error()
         return
 
     from features.build import FEATURE_COLUMNS
@@ -801,6 +818,175 @@ def get_power_regression(
 ) -> dict:
     from models.regression import train_power_regression
     return train_power_regression(_feature_matrix, _power_grid)
+
+
+@st.cache_data(show_spinner="Loading JIRAM observation coverage...")
+def get_jiram_observation_coverage() -> pd.DataFrame | None:
+    try:
+        from ingest.jiram_coverage import load_jiram_observation_coverage
+        return load_jiram_observation_coverage()
+    except (FileNotFoundError, ValueError):
+        return None
+
+
+@st.cache_data(show_spinner="Computing time-resolved activity...")
+def get_time_resolved_activity(
+    _feature_matrix: "pd.DataFrame",
+    _power_grid: "pd.DataFrame",
+    _coverage: "pd.DataFrame | None",
+    instrument: str = "combined",
+    time_bin: str = "all",
+) -> dict:
+    from analysis.coverage_corrected_volcanism import compute_coverage_corrected_volcanism
+    from analysis.coverage_corrected_volcanism import save_coverage_corrected_outputs
+    from ingest.thermal_activity_events import load_activity_events, save_activity_events
+
+    activity_events, optional_status = load_activity_events(include_optional=True)
+    result = compute_coverage_corrected_volcanism(
+        _feature_matrix,
+        activity_events,
+        jiram_coverage=_coverage,
+        min_observations=1,
+    )
+    try:
+        save_activity_events(activity_events)
+        save_coverage_corrected_outputs(result)
+    except Exception:
+        pass
+    comparison = result["comparison_metrics"]
+    result["cell_activity"] = result["cell_maps"]
+    result["regional_summary"] = comparison["latitude_band_contributions"]
+    result["comparison_summary"] = comparison["spearman_correlation"]
+    result["data_quality"]["optional_dataset_status_detail"] = optional_status
+    result["data_quality"]["named_hotspot_cells"] = int((_feature_matrix.get("has_hotspot", 0) > 0).sum())
+    result["data_quality"]["thermal_cells"] = int((result["cell_maps"]["occurrence_event_count"] > 0).sum())
+    result["available_instruments"] = result["data_quality"].get("coverage_instruments", [])
+    result["available_time_bins"] = sorted(result["coverage_cube"]["time_bin"].dropna().astype(str).unique().tolist())
+    return result
+
+
+def _load_result_csv(filename: str, columns: list[str]) -> pd.DataFrame:
+    path = RESULTS_DIR / filename
+    if not path.exists():
+        return pd.DataFrame(columns=columns)
+    try:
+        return pd.read_csv(path)
+    except Exception:
+        return pd.DataFrame(columns=columns)
+
+
+@st.cache_data(show_spinner=False)
+def get_research_question_evaluation_text() -> str:
+    path = RESULTS_DIR / "io_research_question_evaluation.md"
+    if not path.exists():
+        return ""
+    try:
+        return path.read_text(encoding="utf-8")
+    except Exception:
+        return ""
+
+
+@st.cache_data(show_spinner=False)
+def get_metric_interpretation_summary() -> pd.DataFrame:
+    return _load_result_csv(
+        "io_metric_interpretation_summary.csv",
+        [
+            "metric_a",
+            "metric_a_label",
+            "metric_b",
+            "metric_b_label",
+            "spearman",
+            "top10_jaccard",
+            "js_divergence",
+            "reviewer_interpretation",
+        ],
+    )
+
+
+@st.cache_data(show_spinner=False)
+def get_power_concentration_summary() -> pd.DataFrame:
+    return _load_result_csv(
+        "io_power_concentration_summary.csv",
+        [
+            "metric",
+            "metric_label",
+            "top_n",
+            "cumulative_value",
+            "total_value",
+            "cumulative_fraction",
+            "positive_cells",
+        ],
+    )
+
+
+@st.cache_data(show_spinner=False)
+def get_metric_correlation_matrix() -> pd.DataFrame:
+    return _load_result_csv("io_metric_correlation_matrix.csv", [])
+
+
+@st.cache_data(show_spinner=False)
+def get_rank_overlap_summary() -> pd.DataFrame:
+    return _load_result_csv("io_rank_overlap.csv", [])
+
+
+@st.cache_data(show_spinner=False)
+def get_js_divergence_summary() -> pd.DataFrame:
+    return _load_result_csv("io_js_divergence.csv", [])
+
+
+def _format_float(value: object, digits: int = 3) -> str:
+    try:
+        if pd.isna(value):
+            return "n/a"
+        return f"{float(value):.{digits}f}"
+    except (TypeError, ValueError):
+        return "n/a"
+
+
+def _format_percent(value: object, digits: int = 1) -> str:
+    try:
+        if pd.isna(value):
+            return "n/a"
+        return f"{100.0 * float(value):.{digits}f}%"
+    except (TypeError, ValueError):
+        return "n/a"
+
+
+def _science_main_finding(metric_summary: pd.DataFrame, power_summary: pd.DataFrame) -> str:
+    metric_text = (
+        "The generated metric summary is not available yet. Run the time-resolved "
+        "analysis to populate `data/results/io_metric_interpretation_summary.csv`."
+    )
+    if not metric_summary.empty:
+        row = metric_summary[
+            (metric_summary.get("metric_a") == "occurrence_event_count")
+            & (metric_summary.get("metric_b") == "coverage_corrected_intensity")
+        ]
+        if row.empty:
+            row = metric_summary.head(1)
+        first = row.iloc[0]
+        metric_text = (
+            "The current result files show that event occurrence and "
+            "metadata-normalized intensity can rank Io very differently: "
+            f"Spearman correlation `{_format_float(first.get('spearman'))}`, "
+            f"top-10% Jaccard overlap `{_format_float(first.get('top10_jaccard'))}`, "
+            f"and Jensen-Shannon divergence `{_format_float(first.get('js_divergence'))}`."
+        )
+
+    power_text = ""
+    if not power_summary.empty and "top_n" in power_summary.columns:
+        lookup = power_summary.set_index("top_n")
+        parts = []
+        for top_n in (10, 25, 50):
+            if top_n in lookup.index:
+                parts.append(f"top {top_n}: `{_format_percent(lookup.loc[top_n, 'cumulative_fraction'])}`")
+        if parts:
+            power_text = (
+                " Estimated Davies/JIRAM proxy power is concentrated in a limited "
+                f"set of cells ({', '.join(parts)} of total proxy GW)."
+            )
+
+    return metric_text + power_text
 
 
 # ---------------------------------------------------------------------------
@@ -1039,176 +1225,184 @@ def page_scientific_analysis() -> None:
     feature_matrix = get_feature_matrix()
 
     if feature_matrix is None:
-        st.error(
-            "Feature matrix not loaded. Run the pipeline first: "
-            "`python -m features.build`"
-        )
+        show_feature_matrix_missing_error()
         return
 
     tab_labels = [
-        t("page.science.tab.methods", language),
-        t("page.science.tab.spatial", language),
-        t("page.science.tab.bias", language),
+        t("page.science.tab.story", language),
+        t("page.science.tab.metric", language),
+        t("page.science.tab.supporting", language),
         t("page.science.tab.thermal", language),
     ]
     tabs = st.tabs(tab_labels)
+    metric_summary = get_metric_interpretation_summary()
+    power_summary = get_power_concentration_summary()
 
-    # â”€â”€ Tab 1: Research Question & Methods â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # Tab 1: Research Story
     with tabs[0]:
         st.subheader(t("page.science.research_question", language))
         st.info(t("page.science.research_question.body", language))
 
+        st.subheader(t("page.science.why", language))
+        st.markdown(t("page.science.why.body", language))
+
+        st.subheader(t("page.science.compared", language))
+        st.markdown(t("page.science.compared.body", language))
+
+        st.subheader(t("page.science.main_finding", language))
+        st.success(_science_main_finding(metric_summary, power_summary))
+
+        st.subheader(t("page.science.value", language))
+        st.markdown(t("page.science.value.body", language))
+
         st.subheader(t("page.science.limitations", language))
-        st.error(
-            "**1. Target leakage.** `dist_nearest_hotspot_km` is computed from "
-            "the same catalogue used as the label. Any model performance that includes "
-            "this feature is inflated and not a valid measure of generalisation. "
-            "The Scientific Analysis layer always reports non-leaky results alongside "
-            "the leaky baseline for direct comparison."
-        )
-        st.warning(
-            "**2. Synthetic tidal heating.** `tidal_heating_flux` uses the formula "
-            "`cos^2(lon)*cos^2(lat) + 0.3*sin^2(lat)`. This is **not** the Segatz M3 "
-            "asthenosphere model, M4 deep-mantle model, or any published physical "
-            "dissipation grid. Results from this feature are provisional placeholders. "
-            "See Ingest / Tidal Models scaffold for the path to real grids."
-        )
-        st.warning(
-            "**3. Observational coverage bias.** The catalogue reflects where Galileo "
-            "and Voyager observed. Absence of a hotspot is not the absence of volcanic activity. "
-            "See the Bias & Hypotheses tab."
-        )
-        st.warning(
-            "**4. Catalogue vintage.** Dominated by pre-2003 detections. "
-            "Post-2003 observations (New Horizons, JWST, Juno/JIRAM 2023-2025, "
-            "Keck AO) are not fully incorporated."
-        )
-        st.warning(
-            "**5. Estimated thermal-emission proxy.** Davies/JIRAM 4.8 micron "
-            "spectral radiance is now integrated as `power_gw`, but this is an "
-            "estimated proxy, not directly measured bolometric radiant power. "
-            "Intensity results are reported in the Thermal Intensity tab."
-        )
+        st.warning(t("page.science.limitations.body", language))
 
-        st.caption(
-            "Interpretation note: this layer reports associations/consistency with the observed catalogue "
-            "(not discovery). Leakage and proxy caveats apply."
-        )
+        st.subheader(t("page.science.next_steps", language))
+        st.markdown(t("page.science.next_steps.body", language))
 
-        st.subheader(t("page.science.methods_summary", language))
-        st.markdown(
-            "| Analysis | Module | Method |\n"
-            "|----------|--------|--------|\n"
-            "| Leakage audit | `analysis/leakage_audit.py` | Point-biserial r, Spearman r, LR coefficient |\n"
-            "| Ablation | `models/ablation.py` | 5 feature sets x 4-fold spatial CV |\n"
-            "| Geology enrichment | `analysis/geology_enrichment.py` | Chi-square, Wilson 95% CI, Bonferroni |\n"
-            "| Spatial statistics | `analysis/spatial_stats.py` | Ripley's K on sphere, g(r), NN CDF, 99 MC sims |\n"
-            "| Hemispheric asymmetry | `analysis/asymmetry.py` | Exact binomial test, bootstrap histogram CIs |\n"
-            "| Coverage bias | `analysis/coverage_bias.py` | Geology-proxy adjusted hotspot rates |\n"
-            "| Thermal intensity | `analysis/power_intensity.py` / `models/regression.py` | Estimated JIRAM proxy summaries + spatial-CV Ridge regression |\n"
-        )
+        evaluation_text = get_research_question_evaluation_text()
+        if evaluation_text:
+            with st.expander(t("page.science.evaluation", language), expanded=False):
+                st.markdown(evaluation_text)
 
-        try:
-            docs_path = (
-                Path(__file__).parent.parent / "docs" / "scientific_methods.md"
+        with st.expander(t("page.science.methods_summary", language), expanded=False):
+            st.markdown(
+                "| Analysis | Module | Method |\n"
+                "|----------|--------|--------|\n"
+                "| Multi-metric cell maps | `analysis/coverage_corrected_volcanism.py` | Named occurrence, event occurrence, unit-aware intensity proxies, metadata-normalized activity on the 1 deg grid |\n"
+                "| Metric comparison | `analysis/coverage_corrected_volcanism.py` | Spearman correlation, top-10% rank overlap, Jensen-Shannon divergence, top-N concentration |\n"
+                "| Geology enrichment | `analysis/geology_enrichment.py` | Chi-square, Wilson 95% CI, Bonferroni |\n"
+                "| Spatial statistics | `analysis/spatial_stats.py` | Ripley's K on sphere, g(r), NN CDF, 99 MC sims |\n"
+                "| Hemispheric asymmetry | `analysis/asymmetry.py` | Exact binomial test, bootstrap histogram CIs |\n"
+                "| Coverage-bias context | `analysis/coverage_bias.py` | Geology-proxy adjusted hotspot rates; contextual only |\n"
+                "| Thermal intensity | `analysis/power_intensity.py` / `models/regression.py` | Estimated JIRAM proxy summaries + spatial-CV Ridge regression |\n"
             )
-            if docs_path.exists():
-                content = docs_path.read_text(encoding="utf-8")
-                st.download_button(
-                    t("page.science.download_methods", language),
-                    data=content,
-                    file_name="io_hotspot_scientific_methods.md",
-                    mime="text/markdown",
+
+            try:
+                docs_path = (
+                    Path(__file__).parent.parent / "docs" / "scientific_methods.md"
                 )
-        except Exception:
-            pass
+                if docs_path.exists():
+                    content = docs_path.read_text(encoding="utf-8")
+                    st.download_button(
+                        t("page.science.download_methods", language),
+                        data=content,
+                        file_name="io_hotspot_scientific_methods.md",
+                        mime="text/markdown",
+                    )
+            except Exception:
+                pass
 
-    # â”€â”€ Tab 2: Baseline Model Credibility â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # Model credibility context remains available, but it is no longer the headline story.
     with tabs[0]:
-        st.divider()
-        st.subheader(t("page.science.baseline", language))
-        st.subheader(t("page.science.leakage_audit", language))
-        st.markdown(
-            "Each feature is audited for three types of concern:\n"
-            "- **target-derived**: feature constructed from the hotspot catalogue itself\n"
-            "- **analytical proxy**: hand-crafted formula, not an observed quantity\n"
-            "- **high correlation or coefficient**: statistically suspicious magnitude"
-        )
+        with st.expander(t("page.science.model_context", language), expanded=False):
+            st.markdown(t("page.science.model_context.body", language))
+            if st.checkbox(t("page.science.model_context.run", language), value=False):
+                st.subheader(t("page.science.leakage_audit", language))
+                with st.spinner("Running leakage audit..."):
+                    leakage_df = get_leakage_audit(feature_matrix)
+                st.dataframe(_style_leakage_table(leakage_df), use_container_width=True)
+                st.caption(
+                    "Red rows are flagged as `suspected_leakage`. "
+                    "Threshold: |Pearson r| >= 0.6 OR |LR coefficient| >= 5.0 OR target-derived by construction."
+                )
 
-        with st.spinner("Running leakage audit..."):
-            leakage_df = get_leakage_audit(feature_matrix)
+                st.subheader(t("page.science.ablation", language))
+                with st.spinner("Running ablation (this may take ~30 seconds)..."):
+                    ablation = get_ablation(feature_matrix)
+                st.plotly_chart(_ablation_plotly_chart(ablation), use_container_width=True)
 
-        st.dataframe(_style_leakage_table(leakage_df), use_container_width=True)
-        st.caption(
-            "Red rows are flagged as `suspected_leakage`. "
-            "Threshold: |Pearson r| >= 0.6 OR |LR coefficient| >= 5.0 OR target-derived by construction."
-        )
+                no_leak = next(
+                    (fs for fs in ablation["feature_sets"] if fs["name"] == "no_leakage"),
+                    None,
+                )
+                if no_leak:
+                    st.subheader("Honest baseline (no_leakage) - per-fold detail")
+                    fold_df = pd.DataFrame(no_leak["folds"])[
+                        ["fold", "lat_band", "precision", "recall", "f1", "auc_roc", "pr_auc",
+                         "n_test", "n_positive_test"]
+                    ]
+                    fold_df.columns = [
+                        "Fold", "Lat band", "Precision", "Recall", "F1", "AUC-ROC", "PR-AUC",
+                        "N test", "N positive",
+                    ]
+                    st.dataframe(
+                        fold_df.style.format(
+                            {c: "{:.3f}" for c in ["Precision", "Recall", "F1", "AUC-ROC", "PR-AUC"]}
+                        ),
+                        use_container_width=True,
+                    )
 
-        n_flagged = int(leakage_df["suspected_leakage"].sum())
-        if n_flagged > 0:
-            st.error(
-                f"{n_flagged} feature(s) flagged as suspected leakage. "
-                "The ablation study below shows how model performance changes when "
-                "these features are excluded."
-            )
+                with st.expander(t("page.science.coefficients", language), expanded=False):
+                    result = get_model()
+                    if result is None or result[0] is None:
+                        st.warning("Trained model not loaded. Coefficient diagnostic is unavailable.")
+                    else:
+                        model, _ = result
+                        _render_lr_coefficients(model)
 
-        st.divider()
-        st.subheader(t("page.science.ablation", language))
-        st.markdown(
-            "Five feature sets are trained through the same 4-fold spatial CV. "
-            "Bars show mean +/- std across folds. "
-            "**Red = leaky baseline** (includes `dist_nearest_hotspot_km`). "
-            "**Blue = honest baseline** (no leakage-prone features). "
-            "**Grey = null sanity check** (labels permuted - AUC should be ~ 0.5)."
-        )
-
-        with st.spinner("Running ablation (this may take ~30 seconds)..."):
-            ablation = get_ablation(feature_matrix)
-
-        st.plotly_chart(_ablation_plotly_chart(ablation), use_container_width=True)
-
-        # Per-fold table for the no_leakage set
-        no_leak = next(
-            (fs for fs in ablation["feature_sets"] if fs["name"] == "no_leakage"),
-            None,
-        )
-        if no_leak:
-            st.subheader("Honest baseline (no_leakage) - per-fold detail")
-            fold_df = pd.DataFrame(no_leak["folds"])[
-                ["fold", "lat_band", "precision", "recall", "f1", "auc_roc", "pr_auc",
-                 "n_test", "n_positive_test"]
-            ]
-            fold_df.columns = [
-                "Fold", "Lat band", "Precision", "Recall", "F1", "AUC-ROC", "PR-AUC",
-                "N test", "N positive",
-            ]
+    # Tab 2: Metric Evidence
+    with tabs[1]:
+        st.subheader(t("page.science.metric_evidence", language))
+        st.markdown(t("page.science.metric_evidence.body", language))
+        if metric_summary.empty:
+            st.info("Metric interpretation summary is not available yet.")
+        else:
             st.dataframe(
-                fold_df.style.format(
-                    {c: "{:.3f}" for c in ["Precision", "Recall", "F1", "AUC-ROC", "PR-AUC"]}
+                metric_summary.style.format(
+                    {
+                        "spearman": "{:.3f}",
+                        "top10_jaccard": "{:.3f}",
+                        "js_divergence": "{:.3f}",
+                    }
                 ),
                 use_container_width=True,
             )
-            st.info(
-                "**How to read this:** Without `dist_nearest_hotspot_km`, the model "
-                "relies only on geology, tidal proxy, and tidal-stress distance. "
-                "If AUC-ROC is substantially lower than the leaky baseline (0.998-0.999), "
-                "that confirms the leakage diagnosis. "
-                "If AUC is still above ~0.6, geology and/or tidal geometry carry some "
-                "genuine predictive signal - but interpret with caution given the "
-                "synthetic tidal proxy."
+
+        corr_df = get_metric_correlation_matrix()
+        rank_df = get_rank_overlap_summary()
+        js_df = get_js_divergence_summary()
+
+        c1, c2 = st.columns(2)
+        with c1:
+            st.subheader(t("page.time.comparison.correlation", language))
+            if corr_df.empty:
+                st.info("Spearman matrix not available.")
+            else:
+                st.dataframe(corr_df, use_container_width=True)
+        with c2:
+            st.subheader(t("page.time.comparison.rank", language))
+            if rank_df.empty:
+                st.info("Rank-overlap table not available.")
+            else:
+                st.dataframe(rank_df, use_container_width=True)
+
+        st.subheader(t("page.time.comparison.js", language))
+        if js_df.empty:
+            st.info("Jensen-Shannon divergence table not available.")
+        else:
+            st.dataframe(js_df, use_container_width=True)
+
+        st.subheader(t("page.science.power_concentration", language))
+        if power_summary.empty:
+            st.info("Power concentration summary is not available yet.")
+        else:
+            st.dataframe(
+                power_summary.style.format(
+                    {
+                        "cumulative_value": "{:,.1f}",
+                        "total_value": "{:,.1f}",
+                        "cumulative_fraction": "{:.1%}",
+                    }
+                ),
+                use_container_width=True,
             )
 
-    # â”€â”€ Tab 3: Geological Association â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    with tabs[0]:
-        with st.expander(t("page.science.coefficients", language), expanded=False):
-            result = get_model()
-            if result is None or result[0] is None:
-                st.warning("Trained model not loaded. Coefficient diagnostic is unavailable.")
-            else:
-                model, _ = result
-                _render_lr_coefficients(model)
-
-    with tabs[1]:
+    # Tab 3: Supporting Spatial Evidence
+    with tabs[2]:
+        st.subheader(t("page.science.supporting", language))
+        st.markdown(t("page.science.supporting.body", language))
         st.subheader(t("page.science.geology", language))
         st.subheader(t("page.science.geology.enrichment", language))
         st.markdown(
@@ -1257,7 +1451,7 @@ def page_scientific_analysis() -> None:
             )
 
     # â”€â”€ Tab 4: Spatial Point-Pattern Analysis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    with tabs[1]:
+    with tabs[2]:
         st.divider()
         if catalog is None:
             st.error("Hotspot catalog not loaded.")
@@ -1309,7 +1503,7 @@ def page_scientific_analysis() -> None:
         )
 
     # â”€â”€ Tab 5: Hemispheric Asymmetry â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    with tabs[1]:
+    with tabs[2]:
         st.divider()
         if catalog is None:
             st.error("Hotspot catalog not loaded.")
@@ -1768,6 +1962,395 @@ def page_about() -> None:
     )
 
 
+def _activity_scatter(
+    df: pd.DataFrame,
+    value_col: str,
+    title: str,
+    color_title: str,
+    filter_col: str | None = None,
+):
+    import plotly.graph_objects as go
+
+    plot_df = df.copy()
+    if filter_col is not None:
+        plot_df = plot_df[plot_df[filter_col] > 0]
+    plot_df = plot_df.replace([np.inf, -np.inf], np.nan).dropna(subset=["lon_centre", "lat_centre"])
+    if plot_df.empty:
+        fig = go.Figure()
+        fig.update_layout(title=title, height=420)
+        return fig
+
+    power_count = pd.to_numeric(
+        plot_df["power_count"] if "power_count" in plot_df.columns else pd.Series(0, index=plot_df.index),
+        errors="coerce",
+    ).fillna(0)
+    marker_size = np.where(power_count.to_numpy() > 0, 8, 6)
+    hover_text = (
+        plot_df["hotspot_names"].astype(str)
+        if "hotspot_names" in plot_df.columns
+        else pd.Series("", index=plot_df.index)
+    )
+    fig = go.Figure(
+        go.Scattergl(
+            x=plot_df["lon_centre"],
+            y=plot_df["lat_centre"],
+            mode="markers",
+            marker=dict(
+                size=marker_size,
+                color=plot_df[value_col],
+                colorscale="Inferno",
+                showscale=True,
+                colorbar=dict(title=color_title),
+                opacity=0.78,
+            ),
+            text=hover_text,
+            hovertemplate=(
+                "Lon %{x:.1f}<br>Lat %{y:.1f}<br>"
+                f"{color_title}: %{{marker.color:.3g}}<br>%{{text}}<extra></extra>"
+            ),
+        )
+    )
+    fig.update_layout(
+        title=title,
+        height=420,
+        margin=dict(l=20, r=20, t=50, b=35),
+        xaxis=dict(title="Longitude", range=[-180, 180]),
+        yaxis=dict(title="Latitude", range=[-90, 90]),
+    )
+    return fig
+
+
+def _activity_class_scatter(df: pd.DataFrame, title: str):
+    import plotly.graph_objects as go
+
+    colors = {
+        "named_only": "#2f6fbb",
+        "thermal_only": "#ff8c1a",
+        "persistent_thermal": "#d62728",
+        "persistent_active": "#d62728",
+        "episodic_high_power": "#8e24aa",
+        "episodic_high_intensity": "#8e24aa",
+        "observed_active_single_bin": "#ff8c1a",
+        "repeated_active": "#d95f02",
+        "observed_inactive_or_unseen": "#6b7280",
+        "named_inactive_or_unseen": "#2f6fbb",
+        "coverage_limited": "#9aa0a6",
+    }
+    plot_df = df[df["persistence_class"] != "coverage_limited"].copy()
+    fig = go.Figure()
+    for class_name, sub in plot_df.groupby("persistence_class"):
+        hover_text = (
+            sub["power_names"].astype(str)
+            if "power_names" in sub.columns
+            else pd.Series("", index=sub.index)
+        )
+        fig.add_trace(
+            go.Scattergl(
+                x=sub["lon_centre"],
+                y=sub["lat_centre"],
+                mode="markers",
+                marker=dict(size=8, color=colors.get(class_name, "#444"), opacity=0.82),
+                name=class_name.replace("_", " "),
+                text=hover_text,
+                hovertemplate="Lon %{x:.1f}<br>Lat %{y:.1f}<br>%{text}<extra></extra>",
+            )
+        )
+    fig.update_layout(
+        title=title,
+        height=420,
+        margin=dict(l=20, r=20, t=50, b=35),
+        xaxis=dict(title="Longitude", range=[-180, 180]),
+        yaxis=dict(title="Latitude", range=[-90, 90]),
+        legend=dict(orientation="h", y=-0.18),
+    )
+    return fig
+
+
+def _regional_activity_chart(summary: pd.DataFrame):
+    import plotly.graph_objects as go
+
+    thermal_col = (
+        "event_cells"
+        if "event_cells" in summary.columns
+        else "thermal_event_cells"
+        if "thermal_event_cells" in summary.columns
+        else "thermal_proxy_cells"
+    )
+    power_col = (
+        "coverage_corrected_intensity"
+        if "coverage_corrected_intensity" in summary.columns
+        else "total_event_or_proxy_gw"
+        if "total_event_or_proxy_gw" in summary.columns
+        else "total_proxy_gw"
+    )
+    line_name = (
+        "Metadata-normalized intensity proxy"
+        if power_col == "coverage_corrected_intensity"
+        else "Total event/proxy GW"
+    )
+    y2_title = "Unitless proxy" if power_col == "coverage_corrected_intensity" else "Estimated proxy GW"
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            x=summary["lat_band"],
+            y=summary["named_hotspot_cells"],
+            name="Named hotspot cells",
+        )
+    )
+    fig.add_trace(
+        go.Bar(
+            x=summary["lat_band"],
+            y=summary[thermal_col],
+            name="Thermal event/proxy cells",
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=summary["lat_band"],
+            y=summary[power_col],
+            name=line_name,
+            yaxis="y2",
+            mode="lines+markers",
+        )
+    )
+    fig.update_layout(
+        height=440,
+        barmode="group",
+        yaxis=dict(title="Cell count"),
+        yaxis2=dict(title=y2_title, overlaying="y", side="right"),
+        margin=dict(l=20, r=60, t=40, b=80),
+        legend=dict(orientation="h", y=-0.22),
+    )
+    return fig
+
+
+def _coverage_layer_view(df: pd.DataFrame, layer_col: str, time_maps: pd.DataFrame, time_bin: str) -> pd.DataFrame:
+    view = df.copy()
+    if time_bin != "all" and not time_maps.empty:
+        time_subset = time_maps[time_maps["time_bin"].astype(str).eq(str(time_bin))].copy()
+        replace_cols = [
+            "occurrence_event_count",
+            "combined_normalized_intensity",
+            "max_normalized_intensity",
+            "coverage_corrected_event_rate",
+            "coverage_corrected_intensity",
+            "observation_count",
+            "coverage_weight",
+            "instrument_diversity",
+        ]
+        view = view.drop(columns=[col for col in replace_cols if col in view.columns], errors="ignore")
+        view = view.merge(time_subset[["cell_id"] + replace_cols], on="cell_id", how="left")
+        for col in replace_cols:
+            if col in view.columns:
+                view[col] = pd.to_numeric(view[col], errors="coerce").fillna(0)
+        layer_col = "max_normalized_intensity"
+
+    if layer_col not in view.columns:
+        layer_col = "combined_normalized_intensity"
+    view["selected_normalized_intensity"] = pd.to_numeric(view[layer_col], errors="coerce").fillna(0)
+    coverage_weight = pd.to_numeric(view.get("coverage_weight", 0), errors="coerce").replace(0, np.nan)
+    view["selected_coverage_corrected"] = view["selected_normalized_intensity"] / coverage_weight
+    return view
+
+
+def page_time_resolved_activity() -> None:
+    language = get_language()
+    st.title(t("page.time.title", language))
+    st.caption(t("page.time.caption", language))
+    st.warning(t("page.time.warning", language))
+
+    feature_matrix = get_feature_matrix()
+    power_grid = get_power_grid()
+    coverage = get_jiram_observation_coverage()
+    if feature_matrix is None:
+        show_feature_matrix_missing_error()
+        return
+    if power_grid is None:
+        st.error(t("page.iox.error.power_missing", language))
+        return
+    instrument_options = ["combined", "davies_power", "jiram_radiance", "nims_radiance", "ao_brightness", "SIM3168"]
+    layer_columns = {
+        "combined": "max_normalized_intensity",
+        "davies_power": "radiant_power_gw_normalized_layer",
+        "jiram_radiance": "jiram_radiance_normalized_layer",
+        "nims_radiance": "nims_radiance_normalized_layer",
+        "ao_brightness": "ao_brightness_normalized_layer",
+        "SIM3168": "hotspot_count",
+    }
+    filter_col1, filter_col2 = st.columns(2)
+    with filter_col1:
+        selected_instrument = st.selectbox(
+            t("page.time.filter.instrument", language),
+            options=instrument_options,
+            index=0,
+            help=t("page.time.filter.instrument_help", language),
+            format_func=lambda value: t(f"page.time.instrument.{value.lower()}", language)
+            if value.lower() in {"combined", "davies_power", "jiram_radiance", "nims_radiance", "ao_brightness", "sim3168"}
+            else value,
+        )
+
+    preview = get_time_resolved_activity(feature_matrix, power_grid, coverage)
+    time_options = ["all"] + preview.get("available_time_bins", [])
+    with filter_col2:
+        selected_time_bin = st.selectbox(
+            t("page.time.filter.time_bin", language),
+            options=time_options,
+            index=0,
+            help=t("page.time.filter.time_bin_help", language),
+            format_func=lambda value: t("page.time.time_bin.all", language) if value == "all" else value,
+        )
+        st.caption(t("page.time.filter.time_bin_note", language))
+
+    result = get_time_resolved_activity(
+        feature_matrix,
+        power_grid,
+        coverage,
+        selected_instrument,
+        selected_time_bin,
+    )
+    cell_activity = result["cell_activity"]
+    cell_view = _coverage_layer_view(
+        cell_activity,
+        layer_columns.get(selected_instrument, "combined_normalized_intensity"),
+        result.get("time_maps", pd.DataFrame()),
+        selected_time_bin,
+    )
+    regional_summary = result["regional_summary"]
+    comparison_summary = result["comparison_summary"]
+    comparison_metrics = result["comparison_metrics"]
+    data_quality = result["data_quality"]
+
+    st.subheader(t("page.time.claim", language))
+    st.markdown(t("page.time.claim.body", language))
+    st.subheader(t("page.time.why", language))
+    st.markdown(t("page.time.why.body", language))
+    st.subheader(t("page.time.compared", language))
+    st.markdown(t("page.time.compared.body", language))
+    with st.expander(t("page.time.status", language), expanded=True):
+        st.markdown(t("page.time.status.body", language))
+
+    m1, m2, m3, m4 = st.columns(4)
+    m1.metric(t("page.time.metric.coverage_rows", language), f"{data_quality.get('coverage_cube_rows', 0):,}")
+    m2.metric(t("page.time.metric.coverage_cells", language), f"{data_quality['coverage_cells']:,}")
+    m3.metric(t("page.time.metric.thermal_cells", language), f"{data_quality.get('activity_event_rows', data_quality['thermal_cells']):,}")
+    m4.metric(t("page.time.metric.named_cells", language), f"{data_quality['named_hotspot_cells']:,}")
+
+    tab_maps, tab_regions, tab_comparison, tab_quality = st.tabs(
+        [
+            t("page.time.tab.maps", language),
+            t("page.time.tab.regions", language),
+            t("page.time.tab.comparison", language),
+            t("page.time.tab.quality", language),
+        ]
+    )
+    with tab_maps:
+        c1, c2 = st.columns(2)
+        with c1:
+            st.plotly_chart(
+                _activity_scatter(
+                    cell_view,
+                    "occurrence_event_count",
+                    t("page.time.map.occurrence", language),
+                    "events",
+                    filter_col="occurrence_event_count",
+                ),
+                use_container_width=True,
+            )
+            st.plotly_chart(
+                _activity_scatter(
+                    cell_view,
+                    "selected_coverage_corrected",
+                    t("page.time.map.coverage", language),
+                    "unitless / coverage",
+                    filter_col="selected_coverage_corrected",
+                ),
+                use_container_width=True,
+            )
+        with c2:
+            st.plotly_chart(
+                _activity_scatter(
+                    cell_view,
+                    "selected_normalized_intensity",
+                    t("page.time.map.intensity", language),
+                    "unitless percentile",
+                    filter_col="selected_normalized_intensity",
+                ),
+                use_container_width=True,
+            )
+            st.plotly_chart(
+                _activity_class_scatter(
+                    cell_view.rename(columns={"activity_class": "persistence_class"}),
+                    t("page.time.map.persistence", language),
+                ),
+                use_container_width=True,
+            )
+    with tab_regions:
+        st.plotly_chart(_regional_activity_chart(regional_summary), use_container_width=True)
+        st.dataframe(regional_summary, use_container_width=True)
+        st.dataframe(comparison_summary, use_container_width=True)
+        st.download_button(
+            t("page.time.download_region", language),
+            data=regional_summary.to_csv(index=False).encode("utf-8"),
+            file_name="io_time_resolved_regional_summary.csv",
+            mime="text/csv",
+        )
+    with tab_comparison:
+        st.subheader(t("page.time.result", language))
+        st.markdown(result.get("scientific_summary", ""))
+        st.subheader(t("page.time.learn", language))
+        st.markdown(t("page.time.learn.body", language))
+        st.subheader(t("page.time.limitations", language))
+        st.warning(t("page.time.limitations.body", language))
+        c1, c2 = st.columns(2)
+        with c1:
+            st.caption(t("page.time.comparison.correlation", language))
+            st.dataframe(comparison_metrics["spearman_correlation"], use_container_width=True)
+            st.caption(t("page.time.comparison.rank", language))
+            st.dataframe(comparison_metrics["rank_overlap"], use_container_width=True)
+            if "metric_interpretation_summary" in comparison_metrics:
+                st.caption(t("page.time.comparison.interpretation", language))
+                st.dataframe(comparison_metrics["metric_interpretation_summary"], use_container_width=True)
+        with c2:
+            st.caption(t("page.time.comparison.js", language))
+            st.dataframe(comparison_metrics["js_divergence"], use_container_width=True)
+            st.caption(t("page.time.comparison.topn", language))
+            st.dataframe(comparison_metrics["top_n_cumulative"].head(50), use_container_width=True)
+            if "power_concentration_summary" in comparison_metrics:
+                st.caption(t("page.time.comparison.power", language))
+                st.dataframe(comparison_metrics["power_concentration_summary"], use_container_width=True)
+    with tab_quality:
+        st.json(data_quality)
+        quality_cols = [
+            "cell_id",
+            "lon_centre",
+            "lat_centre",
+            "hotspot_count",
+            "occurrence_event_count",
+            "combined_normalized_intensity",
+            "radiant_power_gw_layer",
+            "jiram_radiance_layer",
+            "nims_radiance_layer",
+            "ao_brightness_layer",
+            "observation_count",
+            "coverage_weight",
+            "coverage_corrected_intensity",
+            "persistence_score",
+            "episodicity_score",
+            "activity_class",
+        ]
+        quality_cols = [col for col in quality_cols if col in cell_activity.columns]
+        st.dataframe(
+            cell_activity[quality_cols].head(1000),
+            use_container_width=True,
+        )
+        st.download_button(
+            t("page.time.download_cell", language),
+            data=cell_activity.to_csv(index=False).encode("utf-8"),
+            file_name="io_time_resolved_cell_activity.csv",
+            mime="text/csv",
+        )
+
+
 def page_about_v2() -> None:
     language = get_language()
     st.title(t("page.about.title", language))
@@ -1781,11 +2364,8 @@ def page_faq() -> None:
     st.caption(t("page.faq.caption_split", language))
     st.subheader(t("page.faq.public", language))
     public_faq: list[tuple[str, str]] = [
-        (t("faq.public.q1", language), t("faq.public.a1", language)),
-        (t("faq.public.q2", language), t("faq.public.a2", language)),
-        (t("faq.public.q3", language), t("faq.public.a3", language)),
-        (t("faq.public.q4", language), t("faq.public.a4", language)),
-        (t("faq.public.q5", language), t("faq.public.a5", language)),
+        (t(f"faq.public.q{i}", language), t(f"faq.public.a{i}", language))
+        for i in range(1, 13)
     ]
     for q, a in public_faq:
         with st.expander(f"**{q}**", expanded=False):
@@ -1793,24 +2373,26 @@ def page_faq() -> None:
     st.divider()
     st.subheader(t("page.faq.research", language))
     researcher_entries = [
-        ("thermal",   "faq.research.q1",  "faq.research.a1"),
-        ("viewer",    "faq.research.q2",  "faq.research.a2"),
-        ("methods",   "faq.research.q3",  "faq.research.a3"),
-        ("repro",     "faq.research.q4",  "faq.research.a4"),
-        ("methods",   "faq.research.q5",  "faq.research.a5"),
-        ("data",      "faq.research.q6",  "faq.research.a6"),
-        ("catalogue", "faq.research.q7",  "faq.research.a7"),
-        ("catalogue", "faq.research.q8",  "faq.research.a8"),
-        ("tidal",     "faq.research.q9",  "faq.research.a9"),
-        ("tidal",     "faq.research.q10", "faq.research.a10"),
-        ("tidal",     "faq.research.q11", "faq.research.a11"),
-        ("spatial",   "faq.research.q12", "faq.research.a12"),
-        ("spatial",   "faq.research.q13", "faq.research.a13"),
-        ("spatial",   "faq.research.q14", "faq.research.a14"),
-        ("methods",   "faq.research.q15", "faq.research.a15"),
-        ("methods",   "faq.research.q16", "faq.research.a16"),
-        ("publish",   "faq.research.q17", "faq.research.a17"),
-        ("methods",   "faq.research.q18", "faq.research.a18"),
+        ("overview",   "faq.research.q1",  "faq.research.a1"),
+        ("metrics",    "faq.research.q2",  "faq.research.a2"),
+        ("intensity",  "faq.research.q3",  "faq.research.a3"),
+        ("intensity",  "faq.research.q4",  "faq.research.a4"),
+        ("coverage",   "faq.research.q5",  "faq.research.a5"),
+        ("coverage",   "faq.research.q6",  "faq.research.a6"),
+        ("grid",       "faq.research.q7",  "faq.research.a7"),
+        ("metrics",    "faq.research.q8",  "faq.research.a8"),
+        ("intensity",  "faq.research.q9",  "faq.research.a9"),
+        ("comparison", "faq.research.q10", "faq.research.a10"),
+        ("comparison", "faq.research.q11", "faq.research.a11"),
+        ("comparison", "faq.research.q12", "faq.research.a12"),
+        ("comparison", "faq.research.q13", "faq.research.a13"),
+        ("time",       "faq.research.q14", "faq.research.a14"),
+        ("coverage",   "faq.research.q15", "faq.research.a15"),
+        ("coverage",   "faq.research.q16", "faq.research.a16"),
+        ("metrics",    "faq.research.q17", "faq.research.a17"),
+        ("tidal",      "faq.research.q18", "faq.research.a18"),
+        ("limits",     "faq.research.q19", "faq.research.a19"),
+        ("publish",    "faq.research.q20", "faq.research.a20"),
     ]
     category_ids = list(dict.fromkeys(category for category, _, _ in researcher_entries))
     category_labels = {
@@ -1845,6 +2427,8 @@ elif page == "Io Experience":
     page_io_experience()
 elif page == "Scientific Analysis":
     page_scientific_analysis()
+elif page == "Time-Resolved Activity":
+    page_time_resolved_activity()
 elif page == "About":
     page_about_v2()
 elif page == "FAQ":

@@ -25,6 +25,42 @@ and report which covariates plausibly co-vary with it, with explicit uncertainty
 
 ---
 
+## Exploratory Multi-Metric Volcanism Question
+
+> **To what extent do different volcanic activity metrics, including named
+> hotspot occurrence, estimated thermal intensity, and metadata-normalized
+> observation activity, produce different spatial interpretations of Io's
+> volcanism on a common 1 degree grid?**
+
+This project also includes a reproducible, exploratory comparison framework for
+asking whether Io looks volcanically different depending on the metric used. A
+map of known volcanic centers is not necessarily the same as a map of thermal
+power, and both may differ from activity normalized by observation metadata.
+
+The comparison separates three metric families:
+
+- **Named hotspot occurrence**: `has_hotspot` and `hotspot_count`, derived from
+  catalogued volcanic centers and useful as a geological/reference layer.
+- **Estimated thermal intensity**: Davies/JIRAM estimated proxy GW is kept
+  separate from JIRAM radiance, NIMS radiance, AO brightness, and unitless
+  normalized percentile proxies.
+- **Metadata-normalized observation activity**: activity proxies divided by
+  metadata such as observation counts or coverage weights. This is a
+  metadata-based normalization, not a true footprint/sensitivity correction.
+
+The current generated outputs include Spearman correlation, top-10 percent rank
+overlap, Jensen-Shannon divergence, latitude-band contribution tables, and top-N
+concentration curves. The analysis is designed to show how metric choice changes
+spatial interpretation, not to claim a new physical model of Io.
+
+Strict limitation: metadata-normalized activity must not be described as true
+coverage-corrected volcanism. Real footprints, systematic non-detections,
+instrument sensitivity, and observing-geometry masks are required before making
+that stronger claim. Persistence and episodicity are provisional for the same
+reason: event rows can define activity and metadata coverage at the same time.
+
+---
+
 ## Known limitations we do not hide
 
 1. **Target leakage.** The feature `dist_nearest_hotspot_km`

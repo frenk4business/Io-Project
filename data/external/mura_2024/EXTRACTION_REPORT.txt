@@ -1,0 +1,1 @@
+HTML extraction fallback reason: Mura Table 2 hotspot-location table was not found in article HTML.. Extracted 288 orbit-band peak-radiance rows from Mura Table 2 PDF layout text.

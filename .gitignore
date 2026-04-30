@@ -3,6 +3,7 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
+!data/processed/feature_matrix.parquet
 
 # Model artifacts
 models/*.pkl
@@ -47,3 +48,15 @@ htmlcov/
 
 # Streamlit
 .streamlit/
+
+# External source caches - keep large/downloaded source products out of Git
+data/external/mura_2024/*.html
+data/external/mura_2024/*.pdf
+data/external/mura_2024/*_layout.txt
+data/external/galileo_nims/products/
+data/external/galileo_nims/labels/
+data/external/galileo_nims/*.xlsx
+data/external/galileo_nims/sample_*.csv
+data/external/galileo_nims/sample_*.xml
+data/external/ao_dekleer/*.pdf
+data/external/ao_dekleer/*_layout.txt
