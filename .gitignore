@@ -3,6 +3,7 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
+!data/processed/feature_matrix.parquet
 
 # Model artifacts
 models/*.pkl

@@ -30,12 +30,12 @@ If the existing Render v1 service uses Docker, keep that configuration unchanged
 
 ## Required Data Restore Step
 
-The repository intentionally does not commit ignored raw files, processed parquet files, or bulk source extraction caches. Before launching the full v2 dashboard, restore the files listed in `docs/data_manifest_v2.md`.
+The repository intentionally does not commit ignored raw files, most processed parquet files, or bulk source extraction caches. The small runtime-critical feature matrix is committed at `data/processed/feature_matrix.parquet` so Render can load the same feature table as local without a rebuild. Before launching the full v2 dashboard, restore any remaining files listed in `docs/data_manifest_v2.md` that are still marked `committed_to_github = No`.
 
 Minimum runtime restore for full dashboard behavior:
 
 - `data/processed/base_grid_1deg.parquet`
-- `data/processed/feature_matrix.parquet`
+- `data/processed/feature_matrix.parquet` (committed; restored by Git checkout)
 - `data/processed/hotspots_1deg_grid.parquet`
 - `data/processed/power_grid_1deg.parquet`
 - `data/processed/io_coverage_corrected_cell_maps.parquet`

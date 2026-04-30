@@ -222,6 +222,21 @@ def get_feature_matrix() -> pd.DataFrame | None:
         return load_feature_matrix()
     except FileNotFoundError:
         return None
+
+
+def show_feature_matrix_missing_error() -> None:
+    from config import FEATURE_MATRIX_FILENAME, PROCESSED_DIR
+
+    expected_path = PROCESSED_DIR / FEATURE_MATRIX_FILENAME
+    exists_label = "Yes" if expected_path.exists() else "No"
+    st.error(
+        "Feature matrix not loaded.\n\n"
+        f"- Expected file path: `{expected_path}`\n"
+        f"- Exists on this deployment: `{exists_label}`\n"
+        "- Suggested fix: commit the small processed artifact at "
+        "`data/processed/feature_matrix.parquet`, or update the Render build "
+        "command to run `python -m features.build` after installing requirements."
+    )
 @st.cache_data(show_spinner="Loading trained model...")
 def get_model() -> tuple | None:
     try:
@@ -297,7 +312,7 @@ def page_2d_maps() -> None:
         st.error(t("common.error.catalog_missing", language))
         return
     if feature_matrix is None:
-        st.error(t("page.iox.error.feature_missing", language))
+        show_feature_matrix_missing_error()
         return
     from visualization.hotspot_map import plot_hotspot_catalog, plot_kde_heatmap, plot_prediction_surface
     tab_observed, tab_model = st.tabs([
@@ -376,7 +391,7 @@ def page_3d_globe() -> None:
         st.error(t("common.error.catalog_missing", language))
         return
     if feature_matrix is None:
-        st.error(t("page.iox.error.feature_missing", language))
+        show_feature_matrix_missing_error()
         return
     layer_labels = {key: t(label_key, language) for key, label_key in _LAYER_LABEL_KEYS.items()}
     with st.expander(t("page.globe.controls", language), expanded=True):
@@ -458,7 +473,7 @@ def page_io_experience() -> None:
     feature_matrix = get_feature_matrix()
     power_grid = get_power_grid()
     if feature_matrix is None:
-        st.error(t("page.iox.error.feature_missing", language))
+        show_feature_matrix_missing_error()
         return
     if power_grid is None:
         st.error(t("page.iox.error.power_missing", language))
@@ -646,7 +661,7 @@ def page_model_predictions() -> None:
     model, scaler = result
 
     if feature_matrix is None:
-        st.error(t("page.iox.error.feature_missing", language))
+        show_feature_matrix_missing_error()
         return
 
     from features.build import FEATURE_COLUMNS
@@ -1210,10 +1225,7 @@ def page_scientific_analysis() -> None:
     feature_matrix = get_feature_matrix()
 
     if feature_matrix is None:
-        st.error(
-            "Feature matrix not loaded. Run the pipeline first: "
-            "`python -m features.build`"
-        )
+        show_feature_matrix_missing_error()
         return
 
     tab_labels = [
@@ -2151,7 +2163,7 @@ def page_time_resolved_activity() -> None:
     power_grid = get_power_grid()
     coverage = get_jiram_observation_coverage()
     if feature_matrix is None:
-        st.error(t("page.iox.error.feature_missing", language))
+        show_feature_matrix_missing_error()
         return
     if power_grid is None:
         st.error(t("page.iox.error.power_missing", language))
