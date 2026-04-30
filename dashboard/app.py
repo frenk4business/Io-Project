@@ -237,6 +237,34 @@ def show_feature_matrix_missing_error() -> None:
         "`data/processed/feature_matrix.parquet`, or update the Render build "
         "command to run `python -m features.build` after installing requirements."
     )
+
+
+def show_power_grid_missing_error() -> None:
+    from config import (
+        BASE_GRID_FILENAME,
+        POWER_CATALOG_FILENAME,
+        POWER_GRID_FILENAME,
+        PROCESSED_DIR,
+        RAW_DIR,
+    )
+
+    expected_paths = [
+        ("Power grid parquet", PROCESSED_DIR / POWER_GRID_FILENAME),
+        ("Base grid parquet", PROCESSED_DIR / BASE_GRID_FILENAME),
+        ("Thermal-emission proxy CSV", RAW_DIR / POWER_CATALOG_FILENAME),
+    ]
+    file_lines = "\n".join(
+        f"- {label}: `{path}` (exists: `{'Yes' if path.exists() else 'No'}`)"
+        for label, path in expected_paths
+    )
+    st.error(
+        "Estimated thermal-emission proxy data is not available.\n\n"
+        f"{file_lines}\n\n"
+        "Suggested fix: restore or commit the small runtime data files above. "
+        "To regenerate them locally, run `python -m preprocess.grid`, then "
+        "`python -m preprocess.power_grid` after restoring "
+        "`data/raw/io_hotspot_power.csv`."
+    )
 @st.cache_data(show_spinner="Loading trained model...")
 def get_model() -> tuple | None:
     try:
@@ -476,7 +504,7 @@ def page_io_experience() -> None:
         show_feature_matrix_missing_error()
         return
     if power_grid is None:
-        st.error(t("page.iox.error.power_missing", language))
+        show_power_grid_missing_error()
         return
 
     try:
@@ -1812,10 +1840,7 @@ def page_scientific_analysis() -> None:
 
         power_grid = get_power_grid()
         if power_grid is None:
-            st.error(
-                "Estimated thermal-emission proxy grid is not available. "
-                "Expected `data/raw/io_hotspot_power.csv` and a built base grid."
-            )
+            show_power_grid_missing_error()
             return
 
         obs = power_grid[power_grid["power_count"] > 0].copy()
@@ -2166,7 +2191,7 @@ def page_time_resolved_activity() -> None:
         show_feature_matrix_missing_error()
         return
     if power_grid is None:
-        st.error(t("page.iox.error.power_missing", language))
+        show_power_grid_missing_error()
         return
     instrument_options = ["combined", "davies_power", "jiram_radiance", "nims_radiance", "ao_brightness", "SIM3168"]
     layer_columns = {

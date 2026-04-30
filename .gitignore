@@ -1,9 +1,12 @@
 # Data — raw data is not committed
 data/raw/*
 !data/raw/.gitkeep
+!data/raw/io_hotspot_power.csv
 data/processed/*
 !data/processed/.gitkeep
+!data/processed/base_grid_1deg.parquet
 !data/processed/feature_matrix.parquet
+!data/processed/power_grid_1deg.parquet
 
 # Model artifacts
 models/*.pkl
