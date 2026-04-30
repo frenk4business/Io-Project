@@ -1,0 +1,6 @@
+metric,metric_label,top_n,cumulative_value,total_value,cumulative_fraction,positive_cells
+radiant_power_gw_layer,Davies/JIRAM estimated proxy GW,1,1229.80143708,18122.882703858,0.06785904081463816,266
+radiant_power_gw_layer,Davies/JIRAM estimated proxy GW,5,4147.56576936,18122.882703858,0.22885794920898903,266
+radiant_power_gw_layer,Davies/JIRAM estimated proxy GW,10,6403.43850192,18122.882703858,0.3533344339615924,266
+radiant_power_gw_layer,Davies/JIRAM estimated proxy GW,25,10101.88333152,18122.882703858,0.5574104018986732,266
+radiant_power_gw_layer,Davies/JIRAM estimated proxy GW,50,13285.284756011999,18122.882703858,0.7330668621048807,266
